@@ -474,7 +474,7 @@ public class Preprocessor extends HttpServlet {
 			System.out.print("Enter Year: ");
 	        YEAR = br.readLine();
 	        System.out.print("Enter Y/N for annotations: ");
-	        if(br.readLine() == "Y")
+	        if(br.readLine() == "Y" || br.readLine() == "y")
 	        	dataLabelsFlag = true;
 			
 //			JAXBContext jaxbContext = JAXBContext.newInstance(Activity.class);
