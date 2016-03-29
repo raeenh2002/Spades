@@ -54,7 +54,8 @@ public class Preprocessor extends HttpServlet {
 															add("Working/Job (standing/walking)");}};
 															
 	Double number, sumMagnitude, numberW, sumMagnitudeW, numberB, sumMagnitudeB, numberBW, sumMagnitudeBW, CHUNK = 0.0084;
-	String YEAR = "2015";
+	String YEAR;
+	boolean dataLabelsFlag = false;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -121,7 +122,8 @@ public class Preprocessor extends HttpServlet {
                 + "		   			connectNulls: false,"
                 + "		   			enableMouseTracking: false,"
                 + "		   			dataLabels: {"
-                + "		   				enabled: true, crop: false, overflow: 'none', x: 7, y: 7,"
+                + "		   				enabled: " + ((dataLabelsFlag == true)? "true" : "false") + ","
+                + "						crop: false, overflow: 'none', x: 7, y: 7,"
                 + "		   				formatter: function() {"
                 + "		   					if(this.series.options.id == 1 && this.y == 40) {"
                 + "		   						return \"" + ANNOTATIONS.get(0) + "\";"
@@ -467,6 +469,13 @@ public class Preprocessor extends HttpServlet {
 	public void init() throws ServletException {
 
 		try {
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			System.out.print("Enter Year: ");
+	        YEAR = br.readLine();
+	        System.out.print("Enter Y/N for annotations: ");
+	        if(br.readLine() == "Y" || br.readLine() == "y")
+	        	dataLabelsFlag = true;
 			
 //			JAXBContext jaxbContext = JAXBContext.newInstance(Activity.class);
 //			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
