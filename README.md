@@ -11,5 +11,5 @@ This README tells whatever steps are necessary to get our application up and run
 ### How do I get set up? ###
 
 * Summary of set up: You just need this java code along with your categorized data files. Run this code using your IDE and server.
-* Configuration: 
+* Configuration: After running the code, you'll have to indicate the year of the data as well as wanting to show the annotations on the chart.
 * Database configuration: Put the "data" and "survey" folders in your project working directory.
