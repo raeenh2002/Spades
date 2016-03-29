@@ -470,12 +470,10 @@ public class Preprocessor extends HttpServlet {
 
 		try {
 			
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			System.out.print("Enter Year: ");
-	        YEAR = br.readLine();
-	        System.out.print("Enter Y/N for annotations: ");
-	        if(br.readLine() == "Y" || br.readLine() == "y")
-	        	dataLabelsFlag = true;
+			Runnable r0 = new Runnable0();
+	        Thread t0 = new Thread(r0);
+	        t0.start();
+	        t0.join();			
 			
 //			JAXBContext jaxbContext = JAXBContext.newInstance(Activity.class);
 //			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -579,7 +577,7 @@ public class Preprocessor extends HttpServlet {
 
 		ArrayList<ArrayList<Double>> ret = new ArrayList<ArrayList<Double>>();
 		
-		File folder = new File("data/" + YEAR);
+		File folder = new File("data/" + singleton.YEAR);
 		File[] listOfMonths = folder.listFiles();
 
 		for(int k = 0; k < listOfMonths.length; k++) {
@@ -663,7 +661,7 @@ public class Preprocessor extends HttpServlet {
 		
 		ArrayList<ArrayList<Double>> day = new ArrayList<ArrayList<Double>>();
 		
-		File folder = new File("data/" + YEAR);
+		File folder = new File("data/" + singleton.YEAR);
 		File[] listOfMonths = folder.listFiles();
 
 		for(int k = 0; k < listOfMonths.length; k++) {
@@ -706,13 +704,13 @@ public class Preprocessor extends HttpServlet {
 						
 						day.add(new ArrayList<Double>() {
 							{
-								add((double) new Date(Integer.parseInt(YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
+								add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
 								add(null);
 							}
 						});
 						day.add(new ArrayList<Double>() {
 							{
-								add((double) new Date(Integer.parseInt(YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
+								add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
 								add(null);
 							}
 						});
@@ -812,7 +810,7 @@ public class Preprocessor extends HttpServlet {
 		
 		ArrayList<ArrayList<Double>> day = new ArrayList<ArrayList<Double>>();
 		
-		File folder = new File("data/" + YEAR);
+		File folder = new File("data/" + singleton.YEAR);
 		File[] listOfMonths = folder.listFiles();
 
 		for(int k = 0; k < listOfMonths.length; k++) {
@@ -855,13 +853,13 @@ public class Preprocessor extends HttpServlet {
 						
 						day.add(new ArrayList<Double>() {
 							{
-								add((double) new Date(Integer.parseInt(YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
+								add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
 								add(null);
 							}
 						});
 						day.add(new ArrayList<Double>() {
 							{
-								add((double) new Date(Integer.parseInt(YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
+								add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
 								add(null);
 							}
 						});
@@ -961,7 +959,7 @@ public class Preprocessor extends HttpServlet {
 		
 		ArrayList<ArrayList<Double>> day = new ArrayList<ArrayList<Double>>();
 		
-		File folder = new File("data/" + YEAR);
+		File folder = new File("data/" + singleton.YEAR);
 		File[] listOfMonths = folder.listFiles();
 
 		for(int k = 0; k < listOfMonths.length; k++) {
@@ -1005,13 +1003,13 @@ public class Preprocessor extends HttpServlet {
 						
 						day.add(new ArrayList<Double>() {
 							{
-								add((double) new Date(Integer.parseInt(YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
+								add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
 								add(null);
 							}
 						});
 						day.add(new ArrayList<Double>() {
 							{
-								add((double) new Date(Integer.parseInt(YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
+								add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
 								add(null);
 							}
 						});
@@ -1088,13 +1086,13 @@ public class Preprocessor extends HttpServlet {
 //						if(day.isEmpty() && aveDate.getHours() > 0) {
 //							day.add(new ArrayList<Double>() {
 //								{
-//									add((double) new Date(Integer.parseInt(YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
+//									add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
 //									add(null);
 //								}
 //							});
 //							day.add(new ArrayList<Double>() {
 //								{
-//									add((double) new Date(Integer.parseInt(YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
+//									add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
 //									add(null);
 //								}
 //							});
@@ -1132,7 +1130,7 @@ public class Preprocessor extends HttpServlet {
 		
 		ArrayList<ArrayList<Double>> day = new ArrayList<ArrayList<Double>>();
 		
-		File folder = new File("data/" + YEAR);
+		File folder = new File("data/" + singleton.YEAR);
 		File[] listOfMonths = folder.listFiles();
 
 		for(int k = 0; k < listOfMonths.length; k++) {
@@ -1176,13 +1174,13 @@ public class Preprocessor extends HttpServlet {
 						
 						day.add(new ArrayList<Double>() {
 							{
-								add((double) new Date(Integer.parseInt(YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
+								add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
 								add(null);
 							}
 						});
 						day.add(new ArrayList<Double>() {
 							{
-								add((double) new Date(Integer.parseInt(YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
+								add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
 								add(null);
 							}
 						});
@@ -1289,6 +1287,22 @@ public class Preprocessor extends HttpServlet {
 	    }
 	    return count;
 	}
+}
+
+class Runnable0 implements Runnable{
+    public void run(){
+    	try {
+    		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			System.out.print("Enter Year: ");
+			Preprocessor.singleton.YEAR = br.readLine();
+	        System.out.print("Enter Y/N for annotations: ");
+	        if(br.readLine() == "Y")
+	        	Preprocessor.singleton.dataLabelsFlag = true;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 }
 
 class Runnable1 implements Runnable{
