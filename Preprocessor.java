@@ -29,33 +29,36 @@ public class Preprocessor extends HttpServlet {
 	public ArrayList<ArrayList<ArrayList<Double>>> data, dataW, battery, batteryW;
 	public ArrayList<ArrayList<Double>> prompts, annotations;
 	@SuppressWarnings("serial")
-	public static ArrayList<String> ANNOTATIONS = new ArrayList<String>() {{add("Attending church"); add("Baseball"); add("Basketball");add("Bathing (tub)");
-															add("Bicycling"); add("Charging phone");add("Cleaning up"); add("Cooking/Baking"); add("Dance class");
-															add("Doing chores"); add("Doing dishes");add("Doing laundry"); add("Driving car");add("Doing something else (sitting)");
-															add("Doing something else (standing)");add("Doing something else (walking)");add("Doing something else");
-															add("Eating/Drinking"); add("Eating/Drinking (sitting)");add("Eating/Drinking (standing)"); add("Eating/Drinking (walking)");
-															add("Fitness class"); add("Fixing something");add("Football"); add("Getting dressed");add("Getting ready for something");
-															add("Going somewhere"); add("Going somewhere (biking)");add("Going somewhere (car/bus/train)"); add("Going somewhere (skateboarding)");
-															add("Going somewhere (walking)"); add("Going somewhere (running)");add("Hanging out (sitting)"); add("Hanging out (walking)");add("Hanging out (standing)");
-															add("Hanging out"); add("Having conversation");add("Having conversation (sitting)");add("Having conversation (standing)");add("Having conversation (walking)");
-															add("Hanging with friends"); add("I don't remember");add("In school"); add("In meeting");add("Jogging"); add("Karate class");
-															add("Labeling my day"); add("Listen music");add("Listen music (sitting)"); add("Listen music (lying)");add("Lying down"); add("Mix of things");
-															add("Playing catch"); add("Playing instrument");add("Playing video games (standing)"); add("Playing video games (sitting)");add("Playing video games");
-															add("Playing with child(ren)"); add("Child(ren) care");add("Playing with pet"); add("Putting around");add("Reading/Doing homework/Writing");
-															add("Riding in a car"); add("Running");add("Shopping food"); add("Shopping other");add("Showering"); add("Showering/Bathing");
-															add("Sitting"); add("Sitting in class");add("Skateboarding"); add("Skiing/Snowboarding");add("Sleeping"); add("Soccer");
-															add("Sports/Exercising"); add("Standing");add("Swimming"); add("Taking bus");add("Taking stairs"); add("Taking train");
-															add("Talking(phone/computer)"); add("Talking(phone/computer) (sitting)");add("Talking(phone/computer) (standing)"); add("Talking(phone/computer) (walking)");
-															add("Teaching"); add("Tennis/Racquetball");add("Texting"); add("Texting (sitting)");add("Texting (standing)"); add("Texting (walking)");
-															add("Using computer/tablet"); add("Using computer/tablet (sitting)");add("Using computer/tablet (standing)"); add("Using other technology");
-															add("Using phone for anything"); add("Using phone for anything (walking)");add("Using phone for anything (sitting)"); add("Using phone for anything (standing)");
-															add("Using phone for anything (lying)"); add("Using tools");add("Waiting");add("Waiting (sitting)");add("Waiting (standing)");add("Walking");
-															add("Walking pet");add("Watching shows/movies");add("Watching TV");add("Weightlifting/Strength Training");add("Working/Job (sitting)");
-															add("Working/Job (standing/walking)");}};
+	public static ArrayList<String> ANNOTATIONS = new ArrayList<String>() {{add("Attending church"); add("Baseball"); add("Basketball");
+			add("Bathing (tub)");add("Bicycling"); add("Charging phone");add("Cleaning up"); add("Cooking/Baking"); add("Dance class");
+			add("Doing chores"); add("Doing dishes");add("Doing laundry"); add("Driving car");add("Doing something else (sitting)");
+			add("Doing something else (standing)");add("Doing something else (walking)");add("Doing something else");
+			add("Eating/Drinking"); add("Eating/Drinking (sitting)");add("Eating/Drinking (standing)"); add("Eating/Drinking (walking)");
+			add("Fitness class"); add("Fixing something");add("Football"); add("Getting dressed");add("Getting ready for something");
+			add("Going somewhere"); add("Going somewhere (biking)");add("Going somewhere (car/bus/train)"); add("Going somewhere (skateboarding)");
+			add("Going somewhere (walking)"); add("Going somewhere (running)");add("Hanging out (sitting)"); add("Hanging out (walking)");
+			add("Hanging out (standing)");add("Hanging out"); add("Having conversation");add("Having conversation (sitting)");
+			add("Having conversation (standing)");add("Having conversation (walking)");add("Hanging with friends"); add("I don't remember");
+			add("In school"); add("In meeting");add("Jogging"); add("Karate class");add("Labeling my day"); add("Listen music");
+			add("Listen music (sitting)"); add("Listen music (lying)");add("Lying down"); add("Mix of things");add("Playing catch");
+			add("Playing instrument");add("Playing video games (standing)"); add("Playing video games (sitting)");add("Playing video games");
+			add("Playing with child(ren)"); add("Child(ren) care");add("Playing with pet"); add("Putting around");add("Reading/Doing homework/Writing");
+			add("Riding in a car"); add("Running");add("Shopping food"); add("Shopping other");add("Showering"); add("Showering/Bathing");
+			add("Sitting"); add("Sitting in class");add("Skateboarding"); add("Skiing/Snowboarding");add("Sleeping"); add("Soccer");
+			add("Sports/Exercising"); add("Standing");add("Swimming"); add("Taking bus");add("Taking stairs"); add("Taking train");
+			add("Talking(phone/computer)"); add("Talking(phone/computer) (sitting)");add("Talking(phone/computer) (standing)");
+			add("Talking(phone/computer) (walking)");add("Teaching"); add("Tennis/Racquetball");add("Texting"); add("Texting (sitting)");
+			add("Texting (standing)"); add("Texting (walking)");add("Using computer/tablet"); add("Using computer/tablet (sitting)");
+			add("Using computer/tablet (standing)"); add("Using other technology");add("Using phone for anything"); add("Using phone for anything (walking)");
+			add("Using phone for anything (sitting)");add("Using phone for anything (standing)");add("Using phone for anything (lying)");
+			add("Using tools");add("Waiting");add("Waiting (sitting)");add("Waiting (standing)");add("Walking");add("Walking pet");
+			add("Watching shows/movies");add("Watching TV");add("Weightlifting/Strength Training");add("Working/Job (sitting)");
+			add("Working/Job (standing/walking)");}};
 															
 	Double number, sumMagnitude, numberW, sumMagnitudeW, numberB, sumMagnitudeB, numberBW, sumMagnitudeBW, CHUNK = 0.0084;
 	String YEAR;
 	boolean dataLabelsFlag = false;
+	boolean promptsFlag = false;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -182,16 +185,17 @@ public class Preprocessor extends HttpServlet {
 						+ "		   	   },"
 						+ "			   plotLines: [");
 					
-					for(int j = 0; j < singleton.prompts.size(); j++)
-					{
-						if(new Date(singleton.prompts.get(j).get(0).longValue()).getDate() ==  new Date(singleton.data.get(i).get(0).get(0).longValue()).getDate())
-							out.println("{"
-							+ "			   		value: " + singleton.prompts.get(j).get(0) + ","
-		                    + "			   		color: '" + ((singleton.prompts.get(j).get(1) == 0.0)? "red" : "green") + "',"
-		                    + "			   		dashStyle: 'shortdash'," //Solid
-		                    + "			   		width: 2,"
-		                    + "			   },");
-					}
+					if(promptsFlag)
+						for(int j = 0; j < singleton.prompts.size(); j++)
+						{
+							if(new Date(singleton.prompts.get(j).get(0).longValue()).getDate() ==  new Date(singleton.data.get(i).get(0).get(0).longValue()).getDate())
+								out.println("{"
+								+ "			   		value: " + singleton.prompts.get(j).get(0) + ","
+			                    + "			   		color: '" + ((singleton.prompts.get(j).get(1) == 0.0)? "red" : "green") + "',"
+			                    + "			   		dashStyle: 'shortdash'," //Solid
+			                    + "			   		width: 2,"
+			                    + "			   },");
+						}
 
 					out.println("		],"
 						+ "        },");
@@ -405,47 +409,48 @@ public class Preprocessor extends HttpServlet {
 					count++;
 				}
 				
-				for(int i = 0; i < singleton.data.size(); i++)
-				{	
-					for(int j = 0; j < singleton.annotations.size(); j++)
-					{
-						if(singleton.data.get(i).size() > 0 &&
-								new Date(singleton.annotations.get(j).get(0).longValue()).getDate() ==  new Date(singleton.data.get(i).get(0).get(0).longValue()).getDate() &&
-								new Date(singleton.annotations.get(j).get(0).longValue()).getMonth() ==  new Date(singleton.data.get(i).get(0).get(0).longValue()).getMonth())
+				if(singleton.dataLabelsFlag)
+					for(int i = 0; i < singleton.data.size(); i++)
+					{	
+						for(int j = 0; j < singleton.annotations.size(); j++)
 						{
-							out.println(	"{"
-									+ "			   data: [{x:" + singleton.annotations.get(j).get(0) + ", y:" + singleton.annotations.get(j).get(2) + "," +
-//													"dataLabels: {enabled: true, allowOverlap: true, " +
-//													"align: 'left', verticalAlign: 'top', x: 0, y: -18, zIndex: 1000, " +
-//													"crop: false, overflow: 'none', inside: true, padding: 0, maxPadding: 0, " +
-//													"formatter: function() { return '" +
-//													ANNOTATIONS.get((int) ((singleton.annotations.get(j).get(2).longValue() - 50) / 20)) + "';}}" +
-													"}, [" + singleton.annotations.get(j).get(1) + "," + singleton.annotations.get(j).get(2) + "]],"
-									+ "			   id: 1,"
-									+ "			   type : 'line',"
-									+ "			   color: 'rgba(" + (singleton.annotations.get(j).get(2)).longValue() * 2 + "," +
-													(int)(200 - singleton.annotations.get(j).get(2) * 2) + "," +
-													(int)(255 - singleton.annotations.get(j).get(2)) + ", 0.8)',"
-									+ "            borderWidth: 0,"
-									+ "            connectNulls: false,"
-									+ "			   lineWidth: 4,"
-									+ "            nullColor: '#EFEFEF',"
-									+ "            colsize: 24 * 36e5,"
-									+ "			   yAxis: " + (i * 3 + 2) + ","
-									+ "			   xAxis: " + i + ","
-									+ "			   states: {"
-									+ "		       		hover: {"
-					                + "		   		    	enabled: false"
-					                + "	           		}"
-					                + "			   },"
-									+ "       	   tooltip: {"
-							        + "            		headerFormat: 'Magnitude<br/>',"
-							        + "            		pointFormat: '{point.x:%e %b, %Y %H:%M:%S} : <b>{point.y:.2f}</b>'"
-							        + "            },"
-									+ "        },");
+							if(singleton.data.get(i).size() > 0 &&
+									new Date(singleton.annotations.get(j).get(0).longValue()).getDate() ==  new Date(singleton.data.get(i).get(0).get(0).longValue()).getDate() &&
+									new Date(singleton.annotations.get(j).get(0).longValue()).getMonth() ==  new Date(singleton.data.get(i).get(0).get(0).longValue()).getMonth())
+							{
+								out.println(	"{"
+										+ "			   data: [{x:" + singleton.annotations.get(j).get(0) + ", y:" + singleton.annotations.get(j).get(2) + "," +
+	//													"dataLabels: {enabled: true, allowOverlap: true, " +
+	//													"align: 'left', verticalAlign: 'top', x: 0, y: -18, zIndex: 1000, " +
+	//													"crop: false, overflow: 'none', inside: true, padding: 0, maxPadding: 0, " +
+	//													"formatter: function() { return '" +
+	//													ANNOTATIONS.get((int) ((singleton.annotations.get(j).get(2).longValue() - 50) / 20)) + "';}}" +
+														"}, [" + singleton.annotations.get(j).get(1) + "," + singleton.annotations.get(j).get(2) + "]],"
+										+ "			   id: 1,"
+										+ "			   type : 'line',"
+										+ "			   color: 'rgba(" + (singleton.annotations.get(j).get(2)).longValue() * 2 + "," +
+														(int)(200 - singleton.annotations.get(j).get(2) * 2) + "," +
+														(int)(255 - singleton.annotations.get(j).get(2)) + ", 0.8)',"
+										+ "            borderWidth: 0,"
+										+ "            connectNulls: false,"
+										+ "			   lineWidth: 4,"
+										+ "            nullColor: '#EFEFEF',"
+										+ "            colsize: 24 * 36e5,"
+										+ "			   yAxis: " + (i * 3 + 2) + ","
+										+ "			   xAxis: " + i + ","
+										+ "			   states: {"
+										+ "		       		hover: {"
+						                + "		   		    	enabled: false"
+						                + "	           		}"
+						                + "			   },"
+										+ "       	   tooltip: {"
+								        + "            		headerFormat: 'Magnitude<br/>',"
+								        + "            		pointFormat: '{point.x:%e %b, %Y %H:%M:%S} : <b>{point.y:.2f}</b>'"
+								        + "            },"
+										+ "        },");
+							}
 						}
 					}
-				}
 				
 				out.println("],"
 						+ "    });"
@@ -577,74 +582,79 @@ public class Preprocessor extends HttpServlet {
 
 		ArrayList<ArrayList<Double>> ret = new ArrayList<ArrayList<Double>>();
 		
-		File folder = new File("data/" + singleton.YEAR);
-		File[] listOfMonths = folder.listFiles();
+		File folder = new File("data");
+		File[] listOfYears = folder.listFiles();		
 
-		for(int k = 0; k < listOfMonths.length; k++) {
-			for (int j = 1; j <= 31; j++) {
-				for (int i = 0; i < 24; i++) {
-					String DAY = ((Integer.toString(j).length() < 2) ? ("0" + Integer.toString(j)) : (Integer.toString(j)));
-	
-					String HOUR = ((Integer.toString(i).length() < 2) ? ("0" + Integer.toString(i))
-							: (Integer.toString(i)));
-	
-					InputStream gz;
-	
-					try {
-						File temp = new File(listOfMonths[k].getPath() + "/" + DAY + "/" + HOUR);
-						File[] listOfTemps = temp.listFiles();
-						File file = null;
-						
-						for(File alpha : listOfTemps) {
-							if(alpha.getName().contains("annotation") && alpha.getName().contains("gz") && alpha.isFile()) {
-								file = alpha;
-								break;
+		for(int o = 0; o < listOfYears.length; o++) {
+			
+			File[] listOfMonths = listOfYears[o].listFiles();
+			
+			for(int k = 0; k < listOfMonths.length; k++) {
+				for (int j = 1; j <= 31; j++) {
+					for (int i = 0; i < 24; i++) {
+						String DAY = ((Integer.toString(j).length() < 2) ? ("0" + Integer.toString(j)) : (Integer.toString(j)));
+		
+						String HOUR = ((Integer.toString(i).length() < 2) ? ("0" + Integer.toString(i))
+								: (Integer.toString(i)));
+		
+						InputStream gz;
+		
+						try {
+							File temp = new File(listOfMonths[k].getPath() + "/" + DAY + "/" + HOUR);
+							File[] listOfTemps = temp.listFiles();
+							File file = null;
+							
+							for(File alpha : listOfTemps) {
+								if(alpha.getName().contains("annotation") && alpha.getName().contains("gz") && alpha.isFile()) {
+									file = alpha;
+									break;
+								}
 							}
+							
+							gz = new GZIPInputStream(new FileInputStream(file.getPath()));
+						} catch (Exception ignored) {
+							
+							continue;
 						}
-						
-						gz = new GZIPInputStream(new FileInputStream(file.getPath()));
-					} catch (Exception ignored) {
-						
-						continue;
-					}
-	
-					Reader decoder = new InputStreamReader(gz, "UTF-8");
-					BufferedReader buffered = new BufferedReader(decoder);
-	
-					String text = buffered.readLine();
-					text = buffered.readLine();
-	
-					while (text != null && countOccurrences(text, ',') < 8) {
-	
-						DateFormat df = new SimpleDateFormat("y-M-d k:m:s.S", Locale.ENGLISH);
-	
-						Date fromDate = df.parse(text.substring(text.indexOf(",") + 1, text.indexOf(",", text.indexOf(",") + 1)));
-						Date toDate = df.parse(text.substring(text.indexOf(",", text.indexOf(",") + 1) + 1,
-																text.indexOf(",", text.indexOf(",", text.indexOf(",") + 1) + 1)));
-						
-						double height = 0.0;
-						for(int index = 0; index < ANNOTATIONS.size(); index++) {
-							if(text.toLowerCase().contains(ANNOTATIONS.get(index).toLowerCase())) {
-								height = 40 + index / 2.0;
-								break;
-							}
-						}
-						
-						double type = height;
-						
-						ret.add(new ArrayList<Double>() {
-							{
-								add((double) fromDate.getTime());
-								add((double) toDate.getTime());
-								add(type);
-							}
-						});
-						
+		
+						Reader decoder = new InputStreamReader(gz, "UTF-8");
+						BufferedReader buffered = new BufferedReader(decoder);
+		
+						String text = buffered.readLine();
 						text = buffered.readLine();
-									
+		
+						while (text != null && countOccurrences(text, ',') < 8) {
+		
+							DateFormat df = new SimpleDateFormat("y-M-d k:m:s.S", Locale.ENGLISH);
+		
+							Date fromDate = df.parse(text.substring(text.indexOf(",") + 1, text.indexOf(",", text.indexOf(",") + 1)));
+							Date toDate = df.parse(text.substring(text.indexOf(",", text.indexOf(",") + 1) + 1,
+																	text.indexOf(",", text.indexOf(",", text.indexOf(",") + 1) + 1)));
+							
+							double height = 0.0;
+							for(int index = 0; index < ANNOTATIONS.size(); index++) {
+								if(text.toLowerCase().contains(ANNOTATIONS.get(index).toLowerCase())) {
+									height = 40 + index / 2.0;
+									break;
+								}
+							}
+							
+							double type = height;
+							
+							ret.add(new ArrayList<Double>() {
+								{
+									add((double) fromDate.getTime());
+									add((double) toDate.getTime());
+									add(type);
+								}
+							});
+							
+							text = buffered.readLine();
+										
+						}
+		
+						buffered.close();
 					}
-	
-					buffered.close();
 				}
 			}
 		}
@@ -661,140 +671,148 @@ public class Preprocessor extends HttpServlet {
 		
 		ArrayList<ArrayList<Double>> day = new ArrayList<ArrayList<Double>>();
 		
-		File folder = new File("data/" + singleton.YEAR);
-		File[] listOfMonths = folder.listFiles();
-
-		for(int k = 0; k < listOfMonths.length; k++) {
-			for (int j = 1; j <= 31; j++) {
-				for (int i = 0; i < 24; i++) {
-					String DAY = ((Integer.toString(j).length() < 2) ? ("0" + Integer.toString(j)) : (Integer.toString(j)));
-	
-					String HOUR = ((Integer.toString(i).length() < 2) ? ("0" + Integer.toString(i))
-							: (Integer.toString(i)));
-					
-					int MONTH = Integer.parseInt(listOfMonths[k].getName()) - 1;
-	
-					InputStream gz;
-	
-					try {
-						File temp = new File(listOfMonths[k].getPath() + "/" + DAY + "/" + HOUR);
-						File[] listOfTemps = temp.listFiles();
-						File file = null;
-						
-						for(File alpha : listOfTemps) {
-							if(alpha.getName().contains("Battery.9") && alpha.isFile()) {
-								file = alpha;
-								break;
-							}
-						}
-						
-						gz = new GZIPInputStream(new FileInputStream(file.getPath()));
-					} catch (Exception ignored) {
-						
-						int count = 0;
-						for(File file : listOfMonths[k].listFiles()) {
-							if(file.getName().contains(DAY)) {
-								count++;
-								break;
-							}
-						}
-						
-						if(count == 0)
-							break;
-						
-						day.add(new ArrayList<Double>() {
-							{
-								add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
-								add(null);
-							}
-						});
-						day.add(new ArrayList<Double>() {
-							{
-								add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
-								add(null);
-							}
-						});
-						continue;
-					}
-	
-					Reader decoder = new InputStreamReader(gz, "UTF-8");
-					BufferedReader buffered = new BufferedReader(decoder);
-	
-					String text = buffered.readLine();
-					text = buffered.readLine();
-	
-					while (text != null && countOccurrences(text, ',') < 5) {
-	
-						DateFormat df = new SimpleDateFormat("y-M-d k:m:s.S", Locale.ENGLISH);
-						DateFormat tf = new SimpleDateFormat("k:m:s");
-	
-						Date aveDate = df.parse(text.substring(0, text.indexOf(",")));
-	
-						String avetime = tf.format(aveDate);
-						final double avehour = (double) Integer.parseInt(avetime.substring(0, avetime.indexOf(":")))
-								+ (double) Integer
-										.parseInt(avetime.substring(avetime.indexOf(":") + 1, avetime.lastIndexOf(":")))
-										/ 60
-								+ (double) Integer.parseInt(avetime.substring(avetime.lastIndexOf(":") + 1)) / 3600;
-						double hour = avehour;
-	
-						this.sumMagnitudeB = 0.0;
-						this.numberB = 0.0;
-	
-						do {
-						
-							numberB++;
-							Date datetime;
-							
-							try {
-								
-								datetime = df.parse(text.substring(0, text.indexOf(",")));
-								
-							} catch(ParseException e) {
-								
-								text = buffered.readLine();
-								numberB--;
-								continue;
-							}
-							
-							if(aveDate.getDate() != datetime.getDate())
-							{
-								text = buffered.readLine();
-								numberB--;
-								continue;
-							}
-							
-							String time = tf.format(datetime);
-							hour = (double) Integer.parseInt(time.substring(0, time.indexOf(":")))
-									+ (double) Integer
-											.parseInt(time.substring(time.indexOf(":") + 1, time.lastIndexOf(":"))) / 60
-									+ (double) Integer.parseInt(time.substring(time.lastIndexOf(":") + 1)) / 3600;
-	
+		File folder = new File("data");
 		
-							Double magnitude = Double.parseDouble(text.substring(
-													text.indexOf(",", text.indexOf(",", text.indexOf(",") + 1) + 1) + 1, text.lastIndexOf(",")));
-							
-							this.sumMagnitudeB += magnitude;
-							text = buffered.readLine();
+		File[] listOfYears = folder.listFiles();		
+
+		for(int o = 0; o < listOfYears.length; o++) {
+			
+			File[] listOfMonths = listOfYears[o].listFiles();
+
+			for(int k = 0; k < listOfMonths.length; k++) {
+				for (int j = 1; j <= 31; j++) {
+					for (int i = 0; i < 24; i++) {
+						String DAY = ((Integer.toString(j).length() < 2) ? ("0" + Integer.toString(j)) : (Integer.toString(j)));
+		
+						String HOUR = ((Integer.toString(i).length() < 2) ? ("0" + Integer.toString(i))
+								: (Integer.toString(i)));
 						
-						} while (hour - avehour < 0 && text != null && countOccurrences(text, ',') < 5);
-	
-						day.add(new ArrayList<Double>() {
-							{
-								add((double) aveDate.getTime());
-								add(Math.floor(singleton.sumMagnitudeB / numberB * 100) / 100);
-							}
-						});
-									
-					}
-	
-					buffered.close();
-				}
+						int MONTH = Integer.parseInt(listOfMonths[k].getName()) - 1;
+						
+						int YEAR = Integer.parseInt(listOfYears[o].getName());
+		
+						InputStream gz;
+		
+						try {
+							File temp = new File(listOfMonths[k].getPath() + "/" + DAY + "/" + HOUR);
+							File[] listOfTemps = temp.listFiles();
+							File file = null;
 							
-				if(!day.isEmpty())
-					ret.add(day);
-				
-				day = new ArrayList<ArrayList<Double>>();
+							for(File alpha : listOfTemps) {
+								if(alpha.getName().contains("Battery.9") && alpha.isFile()) {
+									file = alpha;
+									break;
+								}
+							}
+							
+							gz = new GZIPInputStream(new FileInputStream(file.getPath()));
+						} catch (Exception ignored) {
+							
+							int count = 0;
+							for(File file : listOfMonths[k].listFiles()) {
+								if(file.getName().contains(DAY)) {
+									count++;
+									break;
+								}
+							}
+							
+							if(count == 0)
+								break;
+							
+							day.add(new ArrayList<Double>() {
+								{
+									add((double) new Date(YEAR - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
+									add(null);
+								}
+							});
+							day.add(new ArrayList<Double>() {
+								{
+									add((double) new Date(YEAR - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
+									add(null);
+								}
+							});
+							continue;
+						}
+		
+						Reader decoder = new InputStreamReader(gz, "UTF-8");
+						BufferedReader buffered = new BufferedReader(decoder);
+		
+						String text = buffered.readLine();
+						text = buffered.readLine();
+		
+						while (text != null && countOccurrences(text, ',') < 5) {
+		
+							DateFormat df = new SimpleDateFormat("y-M-d k:m:s.S", Locale.ENGLISH);
+							DateFormat tf = new SimpleDateFormat("k:m:s");
+		
+							Date aveDate = df.parse(text.substring(0, text.indexOf(",")));
+		
+							String avetime = tf.format(aveDate);
+							final double avehour = (double) Integer.parseInt(avetime.substring(0, avetime.indexOf(":")))
+									+ (double) Integer
+											.parseInt(avetime.substring(avetime.indexOf(":") + 1, avetime.lastIndexOf(":")))
+											/ 60
+									+ (double) Integer.parseInt(avetime.substring(avetime.lastIndexOf(":") + 1)) / 3600;
+							double hour = avehour;
+		
+							this.sumMagnitudeB = 0.0;
+							this.numberB = 0.0;
+		
+							do {
+							
+								numberB++;
+								Date datetime;
+								
+								try {
+									
+									datetime = df.parse(text.substring(0, text.indexOf(",")));
+									
+								} catch(ParseException e) {
+									
+									text = buffered.readLine();
+									numberB--;
+									continue;
+								}
+								
+								if(aveDate.getDate() != datetime.getDate())
+								{
+									text = buffered.readLine();
+									numberB--;
+									continue;
+								}
+								
+								String time = tf.format(datetime);
+								hour = (double) Integer.parseInt(time.substring(0, time.indexOf(":")))
+										+ (double) Integer
+												.parseInt(time.substring(time.indexOf(":") + 1, time.lastIndexOf(":"))) / 60
+										+ (double) Integer.parseInt(time.substring(time.lastIndexOf(":") + 1)) / 3600;
+		
+			
+								Double magnitude = Double.parseDouble(text.substring(
+														text.indexOf(",", text.indexOf(",", text.indexOf(",") + 1) + 1) + 1, text.lastIndexOf(",")));
+								
+								this.sumMagnitudeB += magnitude;
+								text = buffered.readLine();
+							
+							} while (hour - avehour < 0 && text != null && countOccurrences(text, ',') < 5);
+		
+							day.add(new ArrayList<Double>() {
+								{
+									add((double) aveDate.getTime());
+									add(Math.floor(singleton.sumMagnitudeB / numberB * 100) / 100);
+								}
+							});
+										
+						}
+		
+						buffered.close();
+					}
+								
+					if(!day.isEmpty())
+						ret.add(day);
+					
+					day = new ArrayList<ArrayList<Double>>();
+				}
 			}
 		}
 
@@ -810,140 +828,148 @@ public class Preprocessor extends HttpServlet {
 		
 		ArrayList<ArrayList<Double>> day = new ArrayList<ArrayList<Double>>();
 		
-		File folder = new File("data/" + singleton.YEAR);
-		File[] listOfMonths = folder.listFiles();
+		File folder = new File("data");
 
-		for(int k = 0; k < listOfMonths.length; k++) {
-			for (int j = 1; j <= 31; j++) {
-				for (int i = 0; i < 24; i++) {
-					String DAY = ((Integer.toString(j).length() < 2) ? ("0" + Integer.toString(j)) : (Integer.toString(j)));
-	
-					String HOUR = ((Integer.toString(i).length() < 2) ? ("0" + Integer.toString(i))
-							: (Integer.toString(i)));
-	
-					int MONTH = Integer.parseInt(listOfMonths[k].getName()) - 1;
-					
-					InputStream gz;
-	
-					try {
-						File temp = new File(listOfMonths[k].getPath() + "/" + DAY + "/" + HOUR);
-						File[] listOfTemps = temp.listFiles();
-						File file = null;						
-						
-						for(File alpha : listOfTemps) {
-							if(alpha.getName().contains("Battery.F") && alpha.isFile()) {
-								file = alpha;
-								break;
-							}
-						}						
-						
-						gz = new GZIPInputStream(new FileInputStream(file.getPath()));
-					} catch (Exception ignored) {
-						
-						int count = 0;
-						for(File file : listOfMonths[k].listFiles()) {
-							if(file.getName().contains(DAY)) {
-								count++;
-								break;
-							}
-						}
-						
-						if(count == 0)
-							break;
-						
-						day.add(new ArrayList<Double>() {
-							{
-								add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
-								add(null);
-							}
-						});
-						day.add(new ArrayList<Double>() {
-							{
-								add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
-								add(null);
-							}
-						});
-						continue;
-					}
-	
-					Reader decoder = new InputStreamReader(gz, "UTF-8");
-					BufferedReader buffered = new BufferedReader(decoder);
-	
-					String text = buffered.readLine();
-					text = buffered.readLine();
-	
-					while (text != null && countOccurrences(text, ',') < 5) {
-	
-						DateFormat df = new SimpleDateFormat("y-M-d k:m:s.S", Locale.ENGLISH);
-						DateFormat tf = new SimpleDateFormat("k:m:s");
-	
-						Date aveDate = df.parse(text.substring(0, text.indexOf(",")));
-	
-						String avetime = tf.format(aveDate);
-						final double avehour = (double) Integer.parseInt(avetime.substring(0, avetime.indexOf(":")))
-								+ (double) Integer
-										.parseInt(avetime.substring(avetime.indexOf(":") + 1, avetime.lastIndexOf(":")))
-										/ 60
-								+ (double) Integer.parseInt(avetime.substring(avetime.lastIndexOf(":") + 1)) / 3600;
-						double hour = avehour;
-	
-						this.sumMagnitudeBW = 0.0;
-						this.numberBW = 0.0;
-	
-						do {
-						
-							numberBW++;
-							Date datetime;
-							
-							try {
-								
-								datetime = df.parse(text.substring(0, text.indexOf(",")));
-								
-							} catch(ParseException e) {
-								
-								text = buffered.readLine();
-								numberBW--;
-								continue;
-							}
-							
-							if(aveDate.getDate() != datetime.getDate())
-							{
-								text = buffered.readLine();
-								numberBW--;
-								continue;
-							}
-							
-							String time = tf.format(datetime);
-							hour = (double) Integer.parseInt(time.substring(0, time.indexOf(":")))
-									+ (double) Integer
-											.parseInt(time.substring(time.indexOf(":") + 1, time.lastIndexOf(":"))) / 60
-									+ (double) Integer.parseInt(time.substring(time.lastIndexOf(":") + 1)) / 3600;
-	
+		File[] listOfYears = folder.listFiles();		
+
+		for(int o = 0; o < listOfYears.length; o++) {
+			
+			File[] listOfMonths = listOfYears[o].listFiles();
+
+			for(int k = 0; k < listOfMonths.length; k++) {
+				for (int j = 1; j <= 31; j++) {
+					for (int i = 0; i < 24; i++) {
+						String DAY = ((Integer.toString(j).length() < 2) ? ("0" + Integer.toString(j)) : (Integer.toString(j)));
 		
-							Double magnitude = Double.parseDouble(text.substring(
-													text.indexOf(",", text.indexOf(",", text.indexOf(",") + 1) + 1) + 1, text.lastIndexOf(",")));
-							
-							this.sumMagnitudeBW += magnitude;
-							text = buffered.readLine();
+						String HOUR = ((Integer.toString(i).length() < 2) ? ("0" + Integer.toString(i))
+								: (Integer.toString(i)));
+		
+						int MONTH = Integer.parseInt(listOfMonths[k].getName()) - 1;
 						
-						} while (hour - avehour < 0 && text != null && countOccurrences(text, ',') < 5);
-	
-						day.add(new ArrayList<Double>() {
-							{
-								add((double) aveDate.getTime());
-								add(Math.floor(singleton.sumMagnitudeBW / numberBW * 100) / 100);
-							}
-						});
-									
-					}
-	
-					buffered.close();
-				}
+						int YEAR = Integer.parseInt(listOfYears[o].getName());
+						
+						InputStream gz;
+		
+						try {
+							File temp = new File(listOfMonths[k].getPath() + "/" + DAY + "/" + HOUR);
+							File[] listOfTemps = temp.listFiles();
+							File file = null;						
 							
-				if(!day.isEmpty())
-					ret.add(day);
-				
-				day = new ArrayList<ArrayList<Double>>();
+							for(File alpha : listOfTemps) {
+								if(alpha.getName().contains("Battery.F") && alpha.isFile()) {
+									file = alpha;
+									break;
+								}
+							}						
+							
+							gz = new GZIPInputStream(new FileInputStream(file.getPath()));
+						} catch (Exception ignored) {
+							
+							int count = 0;
+							for(File file : listOfMonths[k].listFiles()) {
+								if(file.getName().contains(DAY)) {
+									count++;
+									break;
+								}
+							}
+							
+							if(count == 0)
+								break;
+							
+							day.add(new ArrayList<Double>() {
+								{
+									add((double) new Date(YEAR - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
+									add(null);
+								}
+							});
+							day.add(new ArrayList<Double>() {
+								{
+									add((double) new Date(YEAR - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
+									add(null);
+								}
+							});
+							continue;
+						}
+		
+						Reader decoder = new InputStreamReader(gz, "UTF-8");
+						BufferedReader buffered = new BufferedReader(decoder);
+		
+						String text = buffered.readLine();
+						text = buffered.readLine();
+		
+						while (text != null && countOccurrences(text, ',') < 5) {
+		
+							DateFormat df = new SimpleDateFormat("y-M-d k:m:s.S", Locale.ENGLISH);
+							DateFormat tf = new SimpleDateFormat("k:m:s");
+		
+							Date aveDate = df.parse(text.substring(0, text.indexOf(",")));
+		
+							String avetime = tf.format(aveDate);
+							final double avehour = (double) Integer.parseInt(avetime.substring(0, avetime.indexOf(":")))
+									+ (double) Integer
+											.parseInt(avetime.substring(avetime.indexOf(":") + 1, avetime.lastIndexOf(":")))
+											/ 60
+									+ (double) Integer.parseInt(avetime.substring(avetime.lastIndexOf(":") + 1)) / 3600;
+							double hour = avehour;
+		
+							this.sumMagnitudeBW = 0.0;
+							this.numberBW = 0.0;
+		
+							do {
+							
+								numberBW++;
+								Date datetime;
+								
+								try {
+									
+									datetime = df.parse(text.substring(0, text.indexOf(",")));
+									
+								} catch(ParseException e) {
+									
+									text = buffered.readLine();
+									numberBW--;
+									continue;
+								}
+								
+								if(aveDate.getDate() != datetime.getDate())
+								{
+									text = buffered.readLine();
+									numberBW--;
+									continue;
+								}
+								
+								String time = tf.format(datetime);
+								hour = (double) Integer.parseInt(time.substring(0, time.indexOf(":")))
+										+ (double) Integer
+												.parseInt(time.substring(time.indexOf(":") + 1, time.lastIndexOf(":"))) / 60
+										+ (double) Integer.parseInt(time.substring(time.lastIndexOf(":") + 1)) / 3600;
+		
+			
+								Double magnitude = Double.parseDouble(text.substring(
+														text.indexOf(",", text.indexOf(",", text.indexOf(",") + 1) + 1) + 1, text.lastIndexOf(",")));
+								
+								this.sumMagnitudeBW += magnitude;
+								text = buffered.readLine();
+							
+							} while (hour - avehour < 0 && text != null && countOccurrences(text, ',') < 5);
+		
+							day.add(new ArrayList<Double>() {
+								{
+									add((double) aveDate.getTime());
+									add(Math.floor(singleton.sumMagnitudeBW / numberBW * 100) / 100);
+								}
+							});
+										
+						}
+		
+						buffered.close();
+					}
+								
+					if(!day.isEmpty())
+						ret.add(day);
+					
+					day = new ArrayList<ArrayList<Double>>();
+				}
 			}
 		}
 
@@ -959,161 +985,154 @@ public class Preprocessor extends HttpServlet {
 		
 		ArrayList<ArrayList<Double>> day = new ArrayList<ArrayList<Double>>();
 		
-		File folder = new File("data/" + singleton.YEAR);
-		File[] listOfMonths = folder.listFiles();
+		File folder = new File("data");
 
-		for(int k = 0; k < listOfMonths.length; k++) {
-			for (int j = 1; j <= 31; j++) {
-				for (int i = 0; i < 24; i++) {
-					String DAY = ((Integer.toString(j).length() < 2) ? ("0" + Integer.toString(j)) : (Integer.toString(j)));
-	
-					String HOUR = ((Integer.toString(i).length() < 2) ? ("0" + Integer.toString(i))
-							: (Integer.toString(i)));
-	
-					int MONTH = Integer.parseInt(listOfMonths[k].getName()) - 1;
-					
-					InputStream gz;
-	
-					try {
-						File temp = new File(listOfMonths[k].getPath() + "/" + DAY + "/" + HOUR);
-						File[] listOfTemps = temp.listFiles();
-						File file = null;
-						
-						for(File alpha : listOfTemps) {
-							if(alpha.getName().toLowerCase().contains("phone") &&
-									alpha.getName().toLowerCase().contains("calibrated")  && alpha.getName().contains("gz") && alpha.isFile()) {
-								file = alpha;
-								break;
-							}
-						}
-						
-						gz = new GZIPInputStream(new FileInputStream(file.getPath()));
-					} catch (Exception ignored) {
-						
-						int count = 0;
-						for(File file : listOfMonths[k].listFiles()) {
-							if(file.getName().contains(DAY)) {
-								count++;
-								break;
-							}
-						}
-						
-						if(count == 0)
-							break;
-						
-						day.add(new ArrayList<Double>() {
-							{
-								add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
-								add(null);
-							}
-						});
-						day.add(new ArrayList<Double>() {
-							{
-								add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
-								add(null);
-							}
-						});
-						continue;
-					}
-	
-					Reader decoder = new InputStreamReader(gz, "UTF-8");
-					BufferedReader buffered = new BufferedReader(decoder);
-	
-					String text = buffered.readLine();
-					text = buffered.readLine();
-	
-					while (text != null && countOccurrences(text, ',') < 4) {
-	
-						DateFormat df = new SimpleDateFormat("y-M-d k:m:s.S", Locale.ENGLISH);
-						DateFormat tf = new SimpleDateFormat("k:m:s");
-	
-						Date aveDate = df.parse(text.substring(0, text.indexOf(",")));
-	
-						String avetime = tf.format(aveDate);
-						final double avehour = (double) Integer.parseInt(avetime.substring(0, avetime.indexOf(":")))
-								+ (double) Integer
-										.parseInt(avetime.substring(avetime.indexOf(":") + 1, avetime.lastIndexOf(":")))
-										/ 60
-								+ (double) Integer.parseInt(avetime.substring(avetime.lastIndexOf(":") + 1)) / 3600;
-						double hour = avehour;
-	
-						this.sumMagnitude = 0.0;
-						this.number = 0.0;
-	
-						do {
-						
-							number++;
-							Date datetime;
-							
-							try {
-								
-								datetime = df.parse(text.substring(0, text.indexOf(",")));
-								
-							} catch(ParseException e) {
-								
-								text = buffered.readLine();
-								number--;
-								continue;
-							}
-							
-							if(aveDate.getDate() != datetime.getDate())
-							{
-								text = buffered.readLine();
-								number--;
-								continue;
-							}
-							
-							String time = tf.format(datetime);
-							hour = (double) Integer.parseInt(time.substring(0, time.indexOf(":")))
-									+ (double) Integer
-											.parseInt(time.substring(time.indexOf(":") + 1, time.lastIndexOf(":"))) / 60
-									+ (double) Integer.parseInt(time.substring(time.lastIndexOf(":") + 1)) / 3600;
-	
+		File[] listOfYears = folder.listFiles();		
+
+		for(int o = 0; o < listOfYears.length; o++) {
+			
+			File[] listOfMonths = listOfYears[o].listFiles();
+
+			for(int k = 0; k < listOfMonths.length; k++) {
+				for (int j = 1; j <= 31; j++) {
+					for (int i = 0; i < 24; i++) {
+						String DAY = ((Integer.toString(j).length() < 2) ? ("0" + Integer.toString(j)) : (Integer.toString(j)));
 		
-							Double magnitude = Math
-									.sqrt(Math
-											.pow(Double.parseDouble(text.substring(text.indexOf(",") + 1,
-													text.indexOf(",", text.indexOf(",") + 1))), 2)
-											+ Math.pow(Double.parseDouble(text.substring(
-													text.indexOf(",", text.indexOf(",") + 1) + 1, text.lastIndexOf(","))), 2)
-											+ Math.pow(Double.parseDouble(text.substring(text.lastIndexOf(",") + 1)), 2));
+						String HOUR = ((Integer.toString(i).length() < 2) ? ("0" + Integer.toString(i))
+								: (Integer.toString(i)));
+		
+						int MONTH = Integer.parseInt(listOfMonths[k].getName()) - 1;
+						
+						int YEAR = Integer.parseInt(listOfYears[o].getName());
+						
+						InputStream gz;
+		
+						try {
+							File temp = new File(listOfMonths[k].getPath() + "/" + DAY + "/" + HOUR);
+							File[] listOfTemps = temp.listFiles();
+							File file = null;
 							
-							this.sumMagnitude += magnitude;
-							text = buffered.readLine();
-						
-						} while (hour - avehour < CHUNK && text != null && countOccurrences(text, ',') < 4);
-	
-//						if(day.isEmpty() && aveDate.getHours() > 0) {
-//							day.add(new ArrayList<Double>() {
-//								{
-//									add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
-//									add(null);
-//								}
-//							});
-//							day.add(new ArrayList<Double>() {
-//								{
-//									add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
-//									add(null);
-//								}
-//							});
-//						}
-						
-						day.add(new ArrayList<Double>() {
-							{
-								add((double) aveDate.getTime());
-								add(Math.floor(singleton.sumMagnitude / number * 100) / 100);
+							for(File alpha : listOfTemps) {
+								if(alpha.getName().toLowerCase().contains("phone") &&
+										alpha.getName().toLowerCase().contains("calibrated")  && alpha.getName().contains("gz") && alpha.isFile()) {
+									file = alpha;
+									break;
+								}
 							}
-						});
-									
-					}
-	
-					buffered.close();
-				}
 							
-				if(!day.isEmpty())
-					ret.add(day);
-				
-				day = new ArrayList<ArrayList<Double>>();
+							gz = new GZIPInputStream(new FileInputStream(file.getPath()));
+						} catch (Exception ignored) {
+							
+							int count = 0;
+							for(File file : listOfMonths[k].listFiles()) {
+								if(file.getName().contains(DAY)) {
+									count++;
+									break;
+								}
+							}
+							
+							if(count == 0)
+								break;
+							
+							day.add(new ArrayList<Double>() {
+								{
+									add((double) new Date(YEAR - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
+									add(null);
+								}
+							});
+							day.add(new ArrayList<Double>() {
+								{
+									add((double) new Date(YEAR - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
+									add(null);
+								}
+							});
+							continue;
+						}
+		
+						Reader decoder = new InputStreamReader(gz, "UTF-8");
+						BufferedReader buffered = new BufferedReader(decoder);
+		
+						String text = buffered.readLine();
+						text = buffered.readLine();
+		
+						while (text != null && countOccurrences(text, ',') < 4) {
+		
+							DateFormat df = new SimpleDateFormat("y-M-d k:m:s.S", Locale.ENGLISH);
+							DateFormat tf = new SimpleDateFormat("k:m:s");
+		
+							Date aveDate = df.parse(text.substring(0, text.indexOf(",")));
+		
+							String avetime = tf.format(aveDate);
+							final double avehour = (double) Integer.parseInt(avetime.substring(0, avetime.indexOf(":")))
+									+ (double) Integer
+											.parseInt(avetime.substring(avetime.indexOf(":") + 1, avetime.lastIndexOf(":")))
+											/ 60
+									+ (double) Integer.parseInt(avetime.substring(avetime.lastIndexOf(":") + 1)) / 3600;
+							double hour = avehour;
+		
+							this.sumMagnitude = 0.0;
+							this.number = 0.0;
+		
+							do {
+							
+								number++;
+								Date datetime;
+								
+								try {
+									
+									datetime = df.parse(text.substring(0, text.indexOf(",")));
+									
+								} catch(ParseException e) {
+									
+									text = buffered.readLine();
+									number--;
+									continue;
+								}
+								
+								if(aveDate.getDate() != datetime.getDate())
+								{
+									text = buffered.readLine();
+									number--;
+									continue;
+								}
+								
+								String time = tf.format(datetime);
+								hour = (double) Integer.parseInt(time.substring(0, time.indexOf(":")))
+										+ (double) Integer
+												.parseInt(time.substring(time.indexOf(":") + 1, time.lastIndexOf(":"))) / 60
+										+ (double) Integer.parseInt(time.substring(time.lastIndexOf(":") + 1)) / 3600;
+		
+			
+								Double magnitude = Math
+										.sqrt(Math
+												.pow(Double.parseDouble(text.substring(text.indexOf(",") + 1,
+														text.indexOf(",", text.indexOf(",") + 1))), 2)
+												+ Math.pow(Double.parseDouble(text.substring(
+														text.indexOf(",", text.indexOf(",") + 1) + 1, text.lastIndexOf(","))), 2)
+												+ Math.pow(Double.parseDouble(text.substring(text.lastIndexOf(",") + 1)), 2));
+								
+								this.sumMagnitude += magnitude;
+								text = buffered.readLine();
+							
+							} while (hour - avehour < CHUNK && text != null && countOccurrences(text, ',') < 4);
+							
+							day.add(new ArrayList<Double>() {
+								{
+									add((double) aveDate.getTime());
+									add(Math.floor(singleton.sumMagnitude / number * 100) / 100);
+								}
+							});
+										
+						}
+		
+						buffered.close();
+					}
+								
+					if(!day.isEmpty())
+						ret.add(day);
+					
+					day = new ArrayList<ArrayList<Double>>();
+				}
 			}
 		}
 
@@ -1130,144 +1149,152 @@ public class Preprocessor extends HttpServlet {
 		
 		ArrayList<ArrayList<Double>> day = new ArrayList<ArrayList<Double>>();
 		
-		File folder = new File("data/" + singleton.YEAR);
-		File[] listOfMonths = folder.listFiles();
+		File folder = new File("data");
 
-		for(int k = 0; k < listOfMonths.length; k++) {
-			for (int j = 1; j <= 31; j++) {
-				for (int i = 0; i < 24; i++) {
-					String DAY = ((Integer.toString(j).length() < 2) ? ("0" + Integer.toString(j)) : (Integer.toString(j)));
-	
-					String HOUR = ((Integer.toString(i).length() < 2) ? ("0" + Integer.toString(i))
-							: (Integer.toString(i)));
-	
-					int MONTH = Integer.parseInt(listOfMonths[k].getName()) - 1;
-					
-					InputStream gz;
-	
-					try {
-						File temp = new File(listOfMonths[k].getPath() + "/" + DAY + "/" + HOUR);
-						File[] listOfTemps = temp.listFiles();
-						File file = null;
-						
-						for(File alpha : listOfTemps) {
-							if((alpha.getName().toLowerCase().contains("watch") || alpha.getName().toLowerCase().contains("lgurbane")) &&
-									alpha.getName().toLowerCase().contains("calibrated")  && alpha.getName().contains("gz") && alpha.isFile()) {
-								file = alpha;
-								break;
-							}
-						}
-						
-						gz = new GZIPInputStream(new FileInputStream(file.getPath()));
-					} catch (Exception ignored) {
-						
-						int count = 0;
-						for(File file : listOfMonths[k].listFiles()) {
-							if(file.getName().contains(DAY)) {
-								count++;
-								break;
-							}
-						}
-						
-						if(count == 0)
-							break;
-						
-						day.add(new ArrayList<Double>() {
-							{
-								add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
-								add(null);
-							}
-						});
-						day.add(new ArrayList<Double>() {
-							{
-								add((double) new Date(Integer.parseInt(singleton.YEAR) - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
-								add(null);
-							}
-						});
-						continue;
-					}
-	
-					Reader decoder = new InputStreamReader(gz, "UTF-8");
-					BufferedReader buffered = new BufferedReader(decoder);
-	
-					String text = buffered.readLine();
-					text = buffered.readLine();
-	
-					while (text != null && countOccurrences(text, ',') < 4) {
-	
-						DateFormat df = new SimpleDateFormat("y-M-d k:m:s.S", Locale.ENGLISH);
-						DateFormat tf = new SimpleDateFormat("k:m:s");
-	
-						Date aveDate = df.parse(text.substring(0, text.indexOf(",")));
-	
-						String avetime = tf.format(aveDate);
-						final double avehour = (double) Integer.parseInt(avetime.substring(0, avetime.indexOf(":")))
-								+ (double) Integer
-										.parseInt(avetime.substring(avetime.indexOf(":") + 1, avetime.lastIndexOf(":")))
-										/ 60
-								+ (double) Integer.parseInt(avetime.substring(avetime.lastIndexOf(":") + 1)) / 3600;
-						double hour = avehour;
-	
-						this.sumMagnitudeW = 0.0;
-						this.numberW = 0.0;
-	
-						do {
-						
-							numberW++;
-							Date datetime;
-							
-							try {
-								
-								datetime = df.parse(text.substring(0, text.indexOf(",")));
-								
-							} catch(ParseException e) {
-								
-								text = buffered.readLine();
-								continue;
-							}
-							
-							if(aveDate.getDate() != datetime.getDate())
-							{
-								text = buffered.readLine();
-								numberW--;
-								continue;
-							}
-							
-							String time = tf.format(datetime);
-							hour = (double) Integer.parseInt(time.substring(0, time.indexOf(":")))
-									+ (double) Integer
-											.parseInt(time.substring(time.indexOf(":") + 1, time.lastIndexOf(":"))) / 60
-									+ (double) Integer.parseInt(time.substring(time.lastIndexOf(":") + 1)) / 3600;
-	
+		File[] listOfYears = folder.listFiles();		
+
+		for(int o = 0; o < listOfYears.length; o++) {
+			
+			File[] listOfMonths = listOfYears[o].listFiles();
+
+			for(int k = 0; k < listOfMonths.length; k++) {
+				for (int j = 1; j <= 31; j++) {
+					for (int i = 0; i < 24; i++) {
+						String DAY = ((Integer.toString(j).length() < 2) ? ("0" + Integer.toString(j)) : (Integer.toString(j)));
 		
-							Double magnitude = Math
-									.sqrt(Math
-											.pow(Double.parseDouble(text.substring(text.indexOf(",") + 1,
-													text.indexOf(",", text.indexOf(",") + 1))), 2)
-											+ Math.pow(Double.parseDouble(text.substring(
-													text.indexOf(",", text.indexOf(",") + 1) + 1, text.lastIndexOf(","))), 2)
-											+ Math.pow(Double.parseDouble(text.substring(text.lastIndexOf(",") + 1)), 2));
-							
-							this.sumMagnitudeW += magnitude;
-							text = buffered.readLine();
+						String HOUR = ((Integer.toString(i).length() < 2) ? ("0" + Integer.toString(i))
+								: (Integer.toString(i)));
+		
+						int MONTH = Integer.parseInt(listOfMonths[k].getName()) - 1;
 						
-						} while (hour - avehour < CHUNK && text != null && countOccurrences(text, ',') < 4);
-	
-						day.add(new ArrayList<Double>() {
-							{
-								add((double) aveDate.getTime());
-								add(Math.floor(singleton.sumMagnitudeW / numberW * 100) / 100);
-							}
-						});
-	
-					}
-	
-					buffered.close();
-				}
+						int YEAR = Integer.parseInt(listOfYears[o].getName());
+						
+						InputStream gz;
+		
+						try {
+							File temp = new File(listOfMonths[k].getPath() + "/" + DAY + "/" + HOUR);
+							File[] listOfTemps = temp.listFiles();
+							File file = null;
 							
-				if(!day.isEmpty())
-					ret.add(day);
-				day = new ArrayList<ArrayList<Double>>();
+							for(File alpha : listOfTemps) {
+								if((alpha.getName().toLowerCase().contains("watch") || alpha.getName().toLowerCase().contains("lgurbane")) &&
+										alpha.getName().toLowerCase().contains("calibrated")  && alpha.getName().contains("gz") && alpha.isFile()) {
+									file = alpha;
+									break;
+								}
+							}
+							
+							gz = new GZIPInputStream(new FileInputStream(file.getPath()));
+						} catch (Exception ignored) {
+							
+							int count = 0;
+							for(File file : listOfMonths[k].listFiles()) {
+								if(file.getName().contains(DAY)) {
+									count++;
+									break;
+								}
+							}
+							
+							if(count == 0)
+								break;
+							
+							day.add(new ArrayList<Double>() {
+								{
+									add((double) new Date(YEAR - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 0).getTime());
+									add(null);
+								}
+							});
+							day.add(new ArrayList<Double>() {
+								{
+									add((double) new Date(YEAR - 1900, MONTH, Integer.parseInt(DAY), Integer.parseInt(HOUR), 59).getTime());
+									add(null);
+								}
+							});
+							continue;
+						}
+		
+						Reader decoder = new InputStreamReader(gz, "UTF-8");
+						BufferedReader buffered = new BufferedReader(decoder);
+		
+						String text = buffered.readLine();
+						text = buffered.readLine();
+		
+						while (text != null && countOccurrences(text, ',') < 4) {
+		
+							DateFormat df = new SimpleDateFormat("y-M-d k:m:s.S", Locale.ENGLISH);
+							DateFormat tf = new SimpleDateFormat("k:m:s");
+		
+							Date aveDate = df.parse(text.substring(0, text.indexOf(",")));
+		
+							String avetime = tf.format(aveDate);
+							final double avehour = (double) Integer.parseInt(avetime.substring(0, avetime.indexOf(":")))
+									+ (double) Integer
+											.parseInt(avetime.substring(avetime.indexOf(":") + 1, avetime.lastIndexOf(":")))
+											/ 60
+									+ (double) Integer.parseInt(avetime.substring(avetime.lastIndexOf(":") + 1)) / 3600;
+							double hour = avehour;
+		
+							this.sumMagnitudeW = 0.0;
+							this.numberW = 0.0;
+		
+							do {
+							
+								numberW++;
+								Date datetime;
+								
+								try {
+									
+									datetime = df.parse(text.substring(0, text.indexOf(",")));
+									
+								} catch(ParseException e) {
+									
+									text = buffered.readLine();
+									continue;
+								}
+								
+								if(aveDate.getDate() != datetime.getDate())
+								{
+									text = buffered.readLine();
+									numberW--;
+									continue;
+								}
+								
+								String time = tf.format(datetime);
+								hour = (double) Integer.parseInt(time.substring(0, time.indexOf(":")))
+										+ (double) Integer
+												.parseInt(time.substring(time.indexOf(":") + 1, time.lastIndexOf(":"))) / 60
+										+ (double) Integer.parseInt(time.substring(time.lastIndexOf(":") + 1)) / 3600;
+		
+			
+								Double magnitude = Math
+										.sqrt(Math
+												.pow(Double.parseDouble(text.substring(text.indexOf(",") + 1,
+														text.indexOf(",", text.indexOf(",") + 1))), 2)
+												+ Math.pow(Double.parseDouble(text.substring(
+														text.indexOf(",", text.indexOf(",") + 1) + 1, text.lastIndexOf(","))), 2)
+												+ Math.pow(Double.parseDouble(text.substring(text.lastIndexOf(",") + 1)), 2));
+								
+								this.sumMagnitudeW += magnitude;
+								text = buffered.readLine();
+							
+							} while (hour - avehour < CHUNK && text != null && countOccurrences(text, ',') < 4);
+		
+							day.add(new ArrayList<Double>() {
+								{
+									add((double) aveDate.getTime());
+									add(Math.floor(singleton.sumMagnitudeW / numberW * 100) / 100);
+								}
+							});
+		
+						}
+		
+						buffered.close();
+					}
+								
+					if(!day.isEmpty())
+						ret.add(day);
+					day = new ArrayList<ArrayList<Double>>();
+				}
 			}
 		}
 
@@ -1293,11 +1320,17 @@ class Runnable0 implements Runnable{
     public void run(){
     	try {
     		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			System.out.print("Enter Year: ");
-			Preprocessor.singleton.YEAR = br.readLine();
+			    		
 	        System.out.print("Enter Y/N for annotations: ");
-	        if(br.readLine() == "Y")
+	        String input = br.readLine();
+	        if(input == "Y" || input == "y")
 	        	Preprocessor.singleton.dataLabelsFlag = true;
+	        
+	        System.out.print("Enter Y/N for prompts: ");
+	        input = br.readLine();
+	        if(input == "Y" || input == "y")
+	        	Preprocessor.singleton.promptsFlag = true;
+	        
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
