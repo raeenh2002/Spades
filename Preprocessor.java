@@ -13,6 +13,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.zip.GZIPInputStream;
+
+import javax.print.Doc;
+import javax.print.DocFlavor;
+import javax.print.DocPrintJob;
+import javax.print.PrintException;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import javax.print.SimpleDoc;
+import javax.print.attribute.DocAttributeSet;
+import javax.print.attribute.HashDocAttributeSet;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -49,55 +61,70 @@ public class Preprocessor extends HttpServlet {
 			add("Talking(phone/computer)"); add("Talking(phone/computer) (sitting)");add("Talking(phone/computer) (standing)");
 			add("Talking(phone/computer) (walking)");add("Teaching"); add("Tennis/Racquetball");add("Texting"); add("Texting (sitting)");
 			add("Texting (standing)"); add("Texting (walking)");add("Using computer/tablet"); add("Using computer/tablet (sitting)");
-			add("Using computer/tablet (standing)"); add("Using other technology");add("Using phone for anything"); add("Using phone for anything (walking)");
-			add("Using phone for anything (sitting)");add("Using phone for anything (standing)");add("Using phone for anything (lying)");
-			add("Using tools");add("Waiting");add("Waiting (sitting)");add("Waiting (standing)");add("Walking");add("Walking pet");
-			add("Watching shows/movies");add("Watching TV");add("Weightlifting/Strength Training");add("Working/Job (sitting)");
-			add("Working/Job (standing/walking)");}};
+			add("Using computer/tablet (standing)"); add("Using other technology");add("Using phone for anything");
+			add("Using phone for anything (walking)");add("Using phone for anything (sitting)");add("Using phone for anything (standing)");
+			add("Using phone for anything (lying)");add("Using tools");add("Waiting");add("Waiting (sitting)");add("Waiting (standing)");
+			add("Walking");add("Walking pet");add("Watching shows/movies");add("Watching TV");add("Weightlifting/Strength Training");
+			add("Working/Job (sitting)");add("Working/Job (standing/walking)");}};
 															
-	Double number, sumMagnitude, numberW, sumMagnitudeW, numberB, sumMagnitudeB, numberBW, sumMagnitudeBW, CHUNK = 0.0084;
+	Double number, sumMagnitude, numberW, sumMagnitudeW, numberB, sumMagnitudeB, numberBW, sumMagnitudeBW, CHUNK = 0.0084 /* 30 seconds*/;
 	String YEAR;
-	boolean dataLabelsFlag = false;
-	boolean promptsFlag = false;
+	boolean dataLabelsFlag = true;
+	boolean promptsFlag = true;
 
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
+		
+		String label = request.getParameter("label");
+		String prompt = request.getParameter("prompt");
+		
+		if(label != null && (label.equals("N") || label.equals("n")))
+			singleton.dataLabelsFlag = false;
+		else if(label != null && (label.equals("Y") || label.equals("y")))
+			singleton.dataLabelsFlag = true;
+		
+		if(prompt != null && (prompt.equals("N") || prompt.equals("n")))
+			singleton.promptsFlag = false;
+		else if(prompt != null && (prompt.equals("Y") || prompt.equals("y")))
+			singleton.promptsFlag = true;
 
+		
 		PrintWriter out = response.getWriter();
+		
+		String html = "";
 
-		out.println(
-				"<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">");
-		out.println("<html>");
+		html += "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">";
+		html += "<html>";
 
-		out.println("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js\"></script>");
-		out.println("<script src=\"https://code.highcharts.com/stock/highstock.js\"></script>");
-		out.println("<script src=\"https://code.highcharts.com/modules/exporting.js\"></script>");
-		out.println("<script src=\"http://code.highcharts.com/modules/offline-exporting.js\"></script>");
-		out.println("<script src=\"https://code.highcharts.com/modules/boost.js\"></script>");
-		out.println("<script src=\"https://github.com/niklasvh/html2canvas/releases/download/0.4.1/html2canvas.js\"></script>");
-//		out.println("<script src=\"https://rawgit.com/sameerkatti/Shirter/master/scripts/canvas2image.js\"></script>");
-//		out.println("<script src=\"https://rawgit.com/hongru/canvas2image/master/canvas2image.js\"></script>");
+		html += "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js\"></script>";
+		html += "<script src=\"https://code.highcharts.com/stock/highstock.js\"></script>";
+		html += "<script src=\"https://code.highcharts.com/modules/exporting.js\"></script>";
+		html += "<script src=\"http://code.highcharts.com/modules/offline-exporting.js\"></script>";
+		html += "<script src=\"https://code.highcharts.com/modules/boost.js\"></script>";
+		html += "<script src=\"https://github.com/niklasvh/html2canvas/releases/download/0.4.1/html2canvas.js\"></script>";
+//		html += "<script src=\"https://rawgit.com/sameerkatti/Shirter/master/scripts/canvas2image.js\"></script>";
+//		html += "<script src=\"https://rawgit.com/hongru/canvas2image/master/canvas2image.js\"></script>";
 
-		out.println("<head>");
-		out.println("<title>Spades</title>");
-//		out.println("<style>"
+		html += "<head>";
+		html += "<title>Spades</title>";
+//		html += "<style>"
 //				+ "@media print {"
 //				+ "	   		@page {"
 //				+ "	   			size: 210mm 297mm;"
 //				+ "	   			margin: 25mm;"
 //				+ "	   			margin-right: 45mm;"
 //				+ "	   		}"
-//				+ "	   }</style>");
-		out.println("</head>");
-		out.println("<body>");
+//				+ "	   }</style>";
+		html += "</head>\n";
+		html += "<body>\n";
 
-		out.println("<div id=\"container\" style=\"width: 3300px; height: 4500px; margin: 0 auto\"></div>");
+		html += "<div id=\"container\" style=\"width: 3300px; height: 4500px; margin: 0 auto\"></div>\n";
 		
-		out.println("<script type=\"text/javascript\">");
+		html += "<script type=\"text/javascript\">\n";
 
-		out.println("$(function () {"
+		html += "$(function () {"
 				+ "	   Highcharts.setOptions({"
 				+ "	   		global: {"
 	            + "	   			useUTC: false"
@@ -125,21 +152,21 @@ public class Preprocessor extends HttpServlet {
                 + "		   			connectNulls: false,"
                 + "		   			enableMouseTracking: false,"
                 + "		   			dataLabels: {"
-                + "		   				enabled: " + ((dataLabelsFlag == true)? "true" : "false") + ","
+                + "		   				enabled: " + ((singleton.dataLabelsFlag == true)? "true" : "false") + ","
                 + "						crop: false, overflow: 'none', x: 7, y: 7,"
                 + "		   				formatter: function() {"
                 + "		   					if(this.series.options.id == 1 && this.y == 40) {"
                 + "		   						return \"" + ANNOTATIONS.get(0) + "\";"
-                + "		   					}");
+                + "		   					}\n";
 				
 				for(int i = 0; i < ANNOTATIONS.size(); i++) {
 					
-					out.println("			else if(this.series.options.id == 1 && this.y == " + (double)(40.0 + i/2.0) + ") {"
+					html += "			else if(this.series.options.id == 1 && this.y == " + (double)(40.0 + i/2.0) + ") {"
 		                + "		   				return \"" + ANNOTATIONS.get(i) + "\";"
-		                + "		   			}");
+		                + "		   			}\n";
 				}
                 
-                out.println("		   	},"
+                html += "		   	},"
                 + "		   			},"
                 + "		   		},"
                 + "				area: {"
@@ -164,11 +191,11 @@ public class Preprocessor extends HttpServlet {
 				+ "            text: '',"
 				+ "            x: -20"
 				+ "        },"
-				+ "        xAxis: [");
+				+ "        xAxis: [\n";
 				
 				for(int i = 0; i < singleton.data.size(); i++)
 				{
-					out.println("{"
+					html += "{"
 						+ "			   lineColor: 'transparent',"
 						+ "			   tickLength: 0,"
 						+ "            showLastLabel: true,"
@@ -183,32 +210,32 @@ public class Preprocessor extends HttpServlet {
 						+ "					x: 0,"
 						+ "					rotation: 0,"
 						+ "		   	   },"
-						+ "			   plotLines: [");
+						+ "			   plotLines: [\n";
 					
-					if(promptsFlag)
+					if(singleton.promptsFlag)
 						for(int j = 0; j < singleton.prompts.size(); j++)
 						{
 							if(new Date(singleton.prompts.get(j).get(0).longValue()).getDate() ==  new Date(singleton.data.get(i).get(0).get(0).longValue()).getDate())
-								out.println("{"
+								html += "{"
 								+ "			   		value: " + singleton.prompts.get(j).get(0) + ","
 			                    + "			   		color: '" + ((singleton.prompts.get(j).get(1) == 0.0)? "red" : "green") + "',"
 			                    + "			   		dashStyle: 'shortdash'," //Solid
 			                    + "			   		width: 2,"
-			                    + "			   },");
+			                    + "			   },\n";
 						}
 
-					out.println("		],"
-						+ "        },");
+					html += "		],"
+						+ "        },\n";
 				}
 				
-				out.println("],"
-						+ "  yAxis: [");
+				html += "],"
+						+ "  yAxis: [\n";
 		
 				for(int i = 0; i < singleton.data.size(); i++)
 				{
 					Date date = new Date(singleton.data.get(i).get(0).get(0).longValue());
 					
-					out.println("{"
+					html += "{"
 					+ "			   opposite: false,"
 					+ "			   lineColor: 'transparent',"
 					+ "			   gridLineColor: 'transparent',"
@@ -279,20 +306,20 @@ public class Preprocessor extends HttpServlet {
 					+ "            min: 0,"
 					+ "            max: 100,"
 					+ "            xAxis: " + i + ","
-					+ "        },");
+					+ "        },\n";
 				}
 		
-				out.println("],"
+				html += "],"
 				+ "		   credits: {"
 				+ "			   enabled: false"
 				+ "		   },"
-				+ "        series: [");
+				+ "        series: [\n";
 				
 				int count = 0;
 				
 				for(ArrayList<ArrayList<Double>> d : singleton.data)
 				{
-					out.println(	"{"
+					html += 	"{"
 						+ "			   data: " + d + ","
 						+ "			   threshold : 1.05,"
 						+ "			   color: 'black',"
@@ -312,7 +339,7 @@ public class Preprocessor extends HttpServlet {
 				        + "            		headerFormat: 'Magnitude<br/>',"
 				        + "            		pointFormat: '{point.x:%e %b, %Y %H:%M:%S} : <b>{point.y:.2f}</b> '"
 				        + "            },"
-						+ "        },");
+						+ "        },\n";
 					
 					count++;
 				}
@@ -321,7 +348,7 @@ public class Preprocessor extends HttpServlet {
 				
 				for(ArrayList<ArrayList<Double>> d : singleton.dataW)
 				{
-					out.println(	"{"
+					html += 	"{"
 						+ "			   data: " + d + ","
 						+ "			   threshold : 1.5,"
 						+ "			   color: 'rgba(255,30,0,0.7)',"
@@ -342,7 +369,7 @@ public class Preprocessor extends HttpServlet {
 				        + "            		headerFormat: 'Magnitude<br/>',"
 				        + "            		pointFormat: '{point.x:%e %b, %Y %H:%M:%S} : <b>{point.y:.2f}</b>'"
 				        + "            },"
-						+ "        },");
+						+ "        },\n";
 					
 					count++;
 				}
@@ -351,7 +378,7 @@ public class Preprocessor extends HttpServlet {
 				
 				for(ArrayList<ArrayList<Double>> b : singleton.battery)
 				{
-					out.println(	"{"
+					html += 	"{"
 						+ "			   data: " + b + ","
 						+ "			   type : 'area',"
 						+ "			   threshold : 1,"
@@ -373,7 +400,7 @@ public class Preprocessor extends HttpServlet {
 				        + "            		headerFormat: 'Magnitude<br/>',"
 				        + "            		pointFormat: '{point.x:%e %b, %Y %H:%M:%S} : <b>{point.y:.2f}</b>'"
 				        + "            },"
-						+ "        },");
+						+ "        },\n";
 					
 					count++;
 				}
@@ -382,7 +409,7 @@ public class Preprocessor extends HttpServlet {
 				
 				for(ArrayList<ArrayList<Double>> b : singleton.batteryW)
 				{
-					out.println(	"{"
+					html += 	"{"
 						+ "			   data: " + b + ","
 						+ "			   type : 'area',"
 						+ "			   threshold : 1,"
@@ -404,7 +431,7 @@ public class Preprocessor extends HttpServlet {
 				        + "            		headerFormat: 'Magnitude<br/>',"
 				        + "            		pointFormat: '{point.x:%e %b, %Y %H:%M:%S} : <b>{point.y:.2f}</b>'"
 				        + "            },"
-						+ "        },");
+						+ "        },\n";
 					
 					count++;
 				}
@@ -418,7 +445,7 @@ public class Preprocessor extends HttpServlet {
 									new Date(singleton.annotations.get(j).get(0).longValue()).getDate() ==  new Date(singleton.data.get(i).get(0).get(0).longValue()).getDate() &&
 									new Date(singleton.annotations.get(j).get(0).longValue()).getMonth() ==  new Date(singleton.data.get(i).get(0).get(0).longValue()).getMonth())
 							{
-								out.println(	"{"
+								html += 	"{"
 										+ "			   data: [{x:" + singleton.annotations.get(j).get(0) + ", y:" + singleton.annotations.get(j).get(2) + "," +
 	//													"dataLabels: {enabled: true, allowOverlap: true, " +
 	//													"align: 'left', verticalAlign: 'top', x: 0, y: -18, zIndex: 1000, " +
@@ -447,12 +474,12 @@ public class Preprocessor extends HttpServlet {
 								        + "            		headerFormat: 'Magnitude<br/>',"
 								        + "            		pointFormat: '{point.x:%e %b, %Y %H:%M:%S} : <b>{point.y:.2f}</b>'"
 								        + "            },"
-										+ "        },");
+										+ "        },\n";
 							}
 						}
 					}
 				
-				out.println("],"
+				html += "],"
 						+ "    });"
 						+ "}); "
 				
@@ -461,12 +488,40 @@ public class Preprocessor extends HttpServlet {
 				
 				+ "Highcharts.Renderer.prototype.symbols.hline = function(x, y, width, height) {"
 				+ 		"return ['M',x ,y + width / 2,'L',x+height,y + width / 2];"
-				+ "};");
+				+ "};\n";
 
-		out.println("</script>");
+		html += "</script>\n";
 
-		out.println("</body>");
-		out.println("</html>");
+		html += "</body>\n";
+		html += "</html>\n";
+		
+		out.println(html);
+		
+		out.close();
+		
+		out = new PrintWriter("index.jsp");
+		
+		out.println(html);
+		
+		out.close();
+		
+		PrintRequestAttributeSet pras = 
+        		new HashPrintRequestAttributeSet();
+        DocFlavor flavor = DocFlavor.INPUT_STREAM.PNG;
+        PrintService defaultService = 
+        		PrintServiceLookup.lookupDefaultPrintService();
+
+        DocPrintJob job = defaultService.createPrintJob();
+        FileInputStream fis = new FileInputStream("index.jsp");
+        DocAttributeSet das = new HashDocAttributeSet();
+        Doc doc = new SimpleDoc(fis, flavor, das);
+        
+        try {
+			job.print(doc, pras);
+		} catch (PrintException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// request.getRequestDispatcher("index.jsp").forward(request, response);
 	}
@@ -474,11 +529,6 @@ public class Preprocessor extends HttpServlet {
 	public void init() throws ServletException {
 
 		try {
-			
-			Runnable r0 = new Runnable0();
-	        Thread t0 = new Thread(r0);
-	        t0.start();
-	        t0.join();			
 			
 //			JAXBContext jaxbContext = JAXBContext.newInstance(Activity.class);
 //			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -506,7 +556,7 @@ public class Preprocessor extends HttpServlet {
 	        t1.join();
 	        t2.join();
 	        t3.join();
-	        t4.join();
+	        t4.join();	     	       
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -518,10 +568,6 @@ public class Preprocessor extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		  catch (JAXBException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 
 	}
 
@@ -1314,28 +1360,6 @@ public class Preprocessor extends HttpServlet {
 	    }
 	    return count;
 	}
-}
-
-class Runnable0 implements Runnable{
-    public void run(){
-    	try {
-    		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			    		
-	        System.out.print("Enter Y/N for annotations: ");
-	        String input = br.readLine();
-	        if(input == "Y" || input == "y")
-	        	Preprocessor.singleton.dataLabelsFlag = true;
-	        
-	        System.out.print("Enter Y/N for prompts: ");
-	        input = br.readLine();
-	        if(input == "Y" || input == "y")
-	        	Preprocessor.singleton.promptsFlag = true;
-	        
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
 }
 
 class Runnable1 implements Runnable{
