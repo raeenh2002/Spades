@@ -12,7 +12,7 @@ This README tells whatever steps are necessary to get our application up and run
 
 * **Summary of set up**: You just need the war file along with the categorized data files. Extract the war file to your server. Also copy the data (data and survey folders) to the server. Now when you run the URL to the location you extracted the war file, the chart will be generated (after some time depending on your data).
 
-* **Detailed setup**: Using an application server is necessary ([Tomcat](http://tomcat.apache.org/) is recommended)
+* **Detailed setup**: Using an application server is necessary ([**Tomcat**](http://tomcat.apache.org/) is recommended)
 
 1. Put the war file in the **webapps** folder of where your application server (Tomcat) is installed.
 
