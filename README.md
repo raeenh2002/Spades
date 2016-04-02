@@ -26,4 +26,4 @@ This README tells whatever steps are necessary to get our application up and run
 
 5. For enabling and disabling labels and prompts simply use **Y** or **N** following that URL (localhost:8080/Spades/index.jsp?label=Y&prompt=Y). Y is for Yes and N is for No.
 
-6. For printing simply print the webpage.
+6. For printing, you can use the free **Full Page Screen Capture** extension for chrome. It gives you an image of the whole chart.
