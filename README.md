@@ -12,7 +12,7 @@ This README tells whatever steps are necessary to get our application up and run
 
 * **Summary of set up**: You just need the war file along with the categorized data files. Extract the war file to your server. Also copy the data (data and survey folders) to the server. Now when you run the URL to the location you extracted the war file, the chart will be generated (after some time depending on your data).
 
-* **Detailed setup**: Using an application server is necessary (Tomcat is recommended)
+* **Detailed setup**: Using an application server is necessary ([Tomcat](http://tomcat.apache.org/)is recommended)
 
 1. Put the war file in the **webapps** folder of where your application server (Tomcat) is installed.
 
@@ -26,6 +26,6 @@ This README tells whatever steps are necessary to get our application up and run
 
 5. For enabling and disabling labels and prompts simply use **Y** or **N** following that URL (localhost:8080/Spades/index.jsp?label=Y&prompt=Y). Y is for Yes and N is for No.
 
-6. For printing, you can use the free **Full Page Screen Capture** extension for chrome. It gives you an image of the whole chart.
+6. For printing, you can use the free **[Full Page Screen Capture](https://chrome.google.com/webstore/detail/full-page-screen-capture/fdpohaocaechififmbbbbbknoalclacl?hl=en-US)** extension for chrome. It gives you an image of the whole chart.
 
-PS: There are lots of other extensions and programs to capture the whole page as an image (i.e **Open Screenshot** for chrome).
+PS: There are lots of other extensions and programs to capture the whole page as an image (i.e **[Open Screenshot](https://chrome.google.com/webstore/detail/open-screenshot/akgpcdalpfphjmfifkmfbpdmgdmeeaeo?hl=en)** for chrome).
