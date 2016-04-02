@@ -20,7 +20,7 @@ This README tells whatever steps are necessary to get our application up and run
 
    * If not, manually extract the war file contents to that folder (using winrar or winzip)
 
-3. Copy the **data** and **survey** folder containing your data to root folder of which your application server (Tomcat) is installed.
+3. Copy the **data** and **survey** folder containing your data to root folder of which your application server (Tomcat) is installed. The data folder contains folders of each year and inside are it's months and so on. The files in these folders are the accelerometer data, battery data for both watch and phone along with annotation labels. The survey folder contains folders with exact dates for prompts.
 
 4. Go to the URL of which the war file is located using a browser (for Tomcat it will be **localhost:8080/Spades**). After a few minutes (depending on the size of your data), the chart will be drawn.
 
