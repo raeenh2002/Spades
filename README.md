@@ -12,16 +12,13 @@ This README tells whatever steps are necessary to get our application up and run
 
 * **Summary of set up**: You just need the war file along with the categorized data files. Extract the war file to your server. Also copy the data (data and survey folders) to the server. Now when you run the URL to the location you extracted the war file, the chart will be generated (after some time depending on your data).
 
-* **Detailed setup**: Using an application server is necessary ([**Tomcat**](http://tomcat.apache.org/) is recommended: download the .exe file from the link and follow the instructions to install the program)
+* **Detailed setup**: Using an application server is necessary ([**Tomcat**](http://tomcat.apache.org/) is recommended: download the latest version of Tomcat. It will download and exe file from the link, then follow the instructions to install the program)
 
 1. Put the war file from this repository in the **webapps** folder of where your application server (Tomcat) is installed.
-
    * Tomcat is usually installed in "C:\Program Files\Apache Software Foundation\Tomcat #.#" and the **webapps** folder is in that location.
 
 2. Run Tomcat (start the server) by opening **Monitor Tomcat** from your installed programs. An icon will appear in the bottom right tray area. Right click on the icon and select **start service**. Wait for it to finish.
-
    * After that it will automatically extract the war file in that folder. (You don't need to do anything)
-
    * If by some chance it didn't, manually extract the war file contents to the **webapps** folder (using winrar or winzip)
       * You can check the folder for a new folder named **Spades**
 
