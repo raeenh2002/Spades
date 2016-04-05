@@ -19,12 +19,17 @@ This README tells whatever steps are necessary to get our application up and run
    * Tomcat is usually installed in "C:\Program Files\Apache Software Foundation\Tomcat #.#" and the **webapps** folder is in that location.
 
 2) Run Tomcat (start the server) by opening **Monitor Tomcat** from your installed programs. An icon will appear in the bottom right tray area. Right click on the icon and select **start service**. Wait for it to finish.
+
    * After that it will automatically extract the war file in that folder. (You don't need to do anything)
+
    * If by some chance it didn't, manually extract the war file contents to the **webapps** folder (using winrar or winzip)
+
       * You can check the folder for a new folder named **Spades**
 
 3) Copy the **data** and **survey** folder containing your data to the root folder of which your application server (Tomcat) is installed ("C:\Program Files\Apache Software Foundation\Tomcat #.#").
+
       * The data folder contains folders of each year and inside are it's months and so on ("2015/01/..."). The files in these folders are the accelerometer data, battery data for both watch and phone along with annotation labels.
+
       * The survey folder contains folders with exact dates for prompts ("2015-10-01/...").
 
 4) After that using a browser, go to the URL of which the war file is located (for Tomcat it will be **localhost:8080/Spades**). After a few minutes (depending on the size of your data), the chart will be drawn. Usually 15mins for 3 months of data.
