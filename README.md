@@ -14,7 +14,7 @@ This README tells whatever steps are necessary to get our application up and run
 
 * **Detailed setup**: Using an application server is necessary ([**Tomcat**](http://tomcat.apache.org/) is recommended)
 
-* download the latest version of Tomcat. It will download and exe file from the link, then follow the instructions to install the program)
+      * download the latest version of Tomcat. It will download and exe file from the link, then follow the instructions to install the program)
 
 1) Put the war file from this repository in the **webapps** folder of where your application server (Tomcat) is installed.
 
