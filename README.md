@@ -12,20 +12,27 @@ This README tells whatever steps are necessary to get our application up and run
 
 * **Summary of set up**: You just need the war file along with the categorized data files. Extract the war file to your server. Also copy the data (data and survey folders) to the server. Now when you run the URL to the location you extracted the war file, the chart will be generated (after some time depending on your data).
 
-* **Detailed setup**: Using an application server is necessary ([**Tomcat**](http://tomcat.apache.org/) is recommended)
+* **Detailed setup**: Using an application server is necessary ([**Tomcat**](http://tomcat.apache.org/) is recommended: download the .exe file from the link and follow the instructions to install the program)
 
-1. Put the war file in the **webapps** folder of where your application server (Tomcat) is installed.
+1. Put the war file from this repository in the **webapps** folder of where your application server (Tomcat) is installed.
 
-2. Run Tomcat (start the server) - It will automatically extract the war file in that folder.
+   * Tomcat is usually installed in "C:\Program Files\Apache Software Foundation\Tomcat #.#" and the **webapps** folder is in that location.
 
-   * If not, manually extract the war file contents to that folder (using winrar or winzip)
+2. Run Tomcat (start the server) by opening **Monitor Tomcat** from your installed programs. An icon will appear in the bottom right tray area. Right click on the icon and select **start service**. Wait for it to finish.
 
-3. Copy the **data** and **survey** folder containing your data to root folder of which your application server (Tomcat) is installed. The data folder contains folders of each year and inside are it's months and so on. The files in these folders are the accelerometer data, battery data for both watch and phone along with annotation labels. The survey folder contains folders with exact dates for prompts.
+   * After that it will automatically extract the war file in that folder. (You don't need to do anything)
 
-4. Go to the URL of which the war file is located using a browser (for Tomcat it will be **localhost:8080/Spades**). After a few minutes (depending on the size of your data), the chart will be drawn.
+   * If by some chance it didn't, manually extract the war file contents to the **webapps** folder (using winrar or winzip)
+      * You can check the folder for a new folder named **Spades**
+
+3. Copy the **data** and **survey** folder containing your data to the root folder of which your application server (Tomcat) is installed ("C:\Program Files\Apache Software Foundation\Tomcat #.#").
+      * The data folder contains folders of each year and inside are it's months and so on ("2015/01/..."). The files in these folders are the accelerometer data, battery data for both watch and phone along with annotation labels.
+      * The survey folder contains folders with exact dates for prompts ("2015-10-01/...").
+
+4. After that using a browser, go to the URL of which the war file is located (for Tomcat it will be **localhost:8080/Spades**). After a few minutes (depending on the size of your data), the chart will be drawn.
 
 5. For enabling and disabling labels and prompts simply use **Y** or **N** following that URL (localhost:8080/Spades/index.jsp?label=Y&prompt=Y). Y is for Yes and N is for No.
 
 6. For printing, you can use the free **[Full Page Screen Capture](https://chrome.google.com/webstore/detail/full-page-screen-capture/fdpohaocaechififmbbbbbknoalclacl?hl=en-US)** extension for chrome. It gives you an image of the whole chart.
 
-PS: There are lots of other extensions and programs to capture the whole page as an image (i.e **[Open Screenshot](https://chrome.google.com/webstore/detail/open-screenshot/akgpcdalpfphjmfifkmfbpdmgdmeeaeo?hl=en)** for chrome).
+PS: There are lots of other extensions and programs to capture the whole page as an image (i.e **[Open Screenshot](https://chrome.google.com/webstore/detail/open-screenshot/akgpcdalpfphjmfifkmfbpdmgdmeeaeo?hl=en)** for chrome and so on).
