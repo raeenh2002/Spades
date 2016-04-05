@@ -28,7 +28,9 @@ This README tells whatever steps are necessary to get our application up and run
 
 3) Copy the **data** and **survey** folder containing your data to the root folder of which your application server (Tomcat) is installed ("C:\Program Files\Apache Software Foundation\Tomcat #.#").
 
-      * The data folder contains folders of each year and inside are it's months and so on ("2015/01/..."). The files in these folders are the accelerometer data, battery data for both watch and phone along with annotation labels.
+      * The data folder contains folders of each year and inside are it's months and so on ("2015/01/...").
+
+           * The files in these folders are the accelerometer data, battery data for both watch and phone along with annotation labels.
 
       * The survey folder contains folders with exact dates for prompts ("2015-10-01/...").
 
