@@ -41,6 +41,22 @@ public class Preprocessor extends HttpServlet {
 	public ArrayList<ArrayList<ArrayList<Double>>> data, dataW, battery, batteryW;
 	public ArrayList<ArrayList<Double>> prompts, annotations;
 	@SuppressWarnings("serial")
+	public static ArrayList<String> POSTURES = new ArrayList<String>() {{add("Lying down");add("Sitting");add("Standing mostly idle");
+			add("Standing moving about");add("Walking");add("Jogging/Running");}};
+	@SuppressWarnings("serial")
+	public static ArrayList<String> PROMPTS = new ArrayList<String>() {{add("Reading/studying");add("Using computer/tablet");
+			add("Talking on phone/computer");add("Texting");add("Taking a class");add("In a meeting");add("Doing physical labor");
+			add("Talking with someone in person");add("Waiting for something");add("Cooking a meal");add("Preparing a snack");
+			add("Eating a meal");add("Eating a snack");add("Enjoying a beverage");add("Cleaning up from eating/cooking");add("Dancing");
+			add("Playing basketball, tennis, or soccer");add("Running/Jogging");add("Exercising/aerobics");add("Walking for fun/exercise");
+			add("Walking a pet");add("Doing exercise class/Zumba");add("Stretching/Yoga");add("Bicycling indoors");add("Bicycling outdoors");
+			add("Swimming");add("Weight lifting");add("Circuit training");add("Reading");add("Watching TV/movies");add("Using computer/tablet");
+			add("Talking on the phone/computer");add("Playing video games");add("Sleeping/napping");add("Hanging out with someone");add("Walking");
+			add("Riding in car/taxi");add("Driving in car");add("Riding a bus");add("Riding the Metro/train");add("Biking");add("Hanging out alone");
+			add("Hanging out with someone");add("Cleaning up");add("Doing laundry");add("Doing other chores");add("Showering/bathing");add("Cooking");
+			add("Getting ready for something");add("Doing yardwork");add("Getting dressed");add("Playing with child/pet (childcare)");add("Sleeping");
+			add("Grocery shopping");add("Other shopping");add("Waiting for something/someone");add("Showering/bathing");add("Doing something else");}};
+	@SuppressWarnings("serial")
 	public static ArrayList<String> ANNOTATIONS = new ArrayList<String>() {{add("Attending church"); add("Baseball"); add("Basketball");
 			add("Bathing (tub)");add("Bicycling"); add("Charging phone");add("Cleaning up"); add("Cooking/Baking"); add("Dance class");
 			add("Doing chores"); add("Doing dishes");add("Doing laundry"); add("Driving car");add("Doing something else (sitting)");
@@ -217,11 +233,27 @@ public class Preprocessor extends HttpServlet {
 						{
 							if(new Date(singleton.prompts.get(j).get(0).longValue()).getDate() ==  new Date(singleton.data.get(i).get(0).get(0).longValue()).getDate())
 								html += "{"
-								+ "			   		value: " + singleton.prompts.get(j).get(0) + ","
-			                    + "			   		color: '" + ((singleton.prompts.get(j).get(1) == 0.0)? "red" : "green") + "',"
-			                    + "			   		dashStyle: 'shortdash'," //Solid
-			                    + "			   		width: 2,"
-			                    + "			   },\n";
+								+ "			   	value: " + singleton.prompts.get(j).get(0) + ","
+			                    + "			   	color: '" + ((singleton.prompts.get(j).get(1) == 0.0)? "red" : "green") + "',"
+			                    + "				dashStyle: 'shortdash'," //Solid
+			                    + "		   		width: 2,"
+			                    + "				zIndex: 100,"
+			                    + "				label: {"
+			                    + "					useHTML: true,"
+			                    + "					text: '" + ((singleton.prompts.get(j).get(1) == 0.0 || singleton.prompts.get(j).get(2) == -1.0)? "" :
+																	POSTURES.get(singleton.prompts.get(j).get(3).intValue())) + "<br>"
+			                    								+ ((singleton.prompts.get(j).get(1) == 0.0 || singleton.prompts.get(j).get(2) == -1.0)? "" :
+			                    									PROMPTS.get(singleton.prompts.get(j).get(2).intValue())) + "',"
+			                    + "					rotation: 0,"
+			                    + "					style: {"
+			                    + "						color: 'green',"
+			                    + "						verticalAlign: 'top',"
+			                    + "						fontSize: 8,"
+//			                    + "						fontWeight: 'bold',"
+//			                    + "						y: -1000,"
+			                    + "					},"
+			                    + "				},"
+			                    + "		 },\n";
 						}
 
 					html += "		],"
@@ -581,20 +613,25 @@ public class Preprocessor extends HttpServlet {
 		
 		for (int i = 0; i < listOfFiles.length; i++) {
 			
-			InputStream csv;
+			InputStream csv, csvR;
 			
 			try {
 				csv = new FileInputStream(
 						listOfFiles[i].getPath() + "/Prompts.csv");
+				csvR = new FileInputStream(
+						listOfFiles[i].getPath() + "/PromptResponses_Random-EMA.csv");
 			} catch (Exception ignored) {
 				continue;
 			}
 			
-			Reader decoder = new InputStreamReader(csv, "UTF-8");
-			BufferedReader buffered = new BufferedReader(decoder);
+			Reader decoder = new InputStreamReader(csv, "UTF-8"), decoderR = new InputStreamReader(csvR, "UTF-8");
+			BufferedReader buffered = new BufferedReader(decoder), bufferedR = new BufferedReader(decoderR);
 
 			String text = buffered.readLine();
 			text = buffered.readLine();
+			
+			String textR = bufferedR.readLine();
+			textR = bufferedR.readLine();
 
 			while (text != null && countOccurrences(text, ',') < 7) {
 				
@@ -604,18 +641,36 @@ public class Preprocessor extends HttpServlet {
 				
 				double completed = (text.substring(text.lastIndexOf(",") + 2).contains("Never"))? 0.0 : 1.0;
 				
+				double activity = -1.0;
+				double posture = -1.0;
+				
+				for(int k = 0; k < PROMPTS.size(); k++)
+					if(textR.toLowerCase().contains(PROMPTS.get(k).toLowerCase()))
+						activity = k;
+				
+				for(int k = 0; k < POSTURES.size(); k++)
+					if(textR.toLowerCase().contains(POSTURES.get(k).toLowerCase()))
+						posture = k;
+				
+				double act = activity;
+				double pos = posture;
+				
 				ret.add(new ArrayList<Double>() {
 					{
 						add((double) date.getTime());
 						add(completed);
+						add(act);
+						add(pos);
 					}
 				});
 				
 				text = buffered.readLine();
+				textR = bufferedR.readLine();
 				
 			}
 			
 			buffered.close();
+			bufferedR.close();
 		}
 		
 		return ret;	
