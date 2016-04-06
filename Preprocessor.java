@@ -240,7 +240,7 @@ public class Preprocessor extends HttpServlet {
 			                    + "				zIndex: 100,"
 			                    + "				label: {"
 			                    + "					useHTML: true,"
-			                    + "					text: '" + ((singleton.prompts.get(j).get(1) == 0.0 || singleton.prompts.get(j).get(2) == -1.0)? "" :
+			                    + "					text: '" + ((singleton.prompts.get(j).get(1) == 0.0 || singleton.prompts.get(j).get(3) == -1.0)? "" :
 																	POSTURES.get(singleton.prompts.get(j).get(3).intValue())) + "<br>"
 			                    								+ ((singleton.prompts.get(j).get(1) == 0.0 || singleton.prompts.get(j).get(2) == -1.0)? "" :
 			                    									PROMPTS.get(singleton.prompts.get(j).get(2).intValue())) + "',"
@@ -644,13 +644,30 @@ public class Preprocessor extends HttpServlet {
 				double activity = -1.0;
 				double posture = -1.0;
 				
-				for(int k = 0; k < PROMPTS.size(); k++)
-					if(textR.toLowerCase().contains(PROMPTS.get(k).toLowerCase()))
-						activity = k;
+				int tenthCommaIndex = textR.indexOf(",",
+												textR.indexOf(",",
+														textR.indexOf(",",
+																textR.indexOf(",",
+																		textR.indexOf(",",
+																				textR.indexOf(",",
+																						textR.indexOf(",",
+																								textR.indexOf(",")
+									+ 1) + 1) + 1) + 1) + 1) + 1) + 1);
 				
 				for(int k = 0; k < POSTURES.size(); k++)
-					if(textR.toLowerCase().contains(POSTURES.get(k).toLowerCase()))
+					if(textR.indexOf("\",", tenthCommaIndex + 1) > 0 && textR.substring(tenthCommaIndex + 1, textR.indexOf("\",", tenthCommaIndex + 1))
+							.toLowerCase().contains(POSTURES.get(k).toLowerCase()))
+					{
 						posture = k;
+						break;
+					}
+				
+				for(int k = 0; k < PROMPTS.size(); k++)
+					if(textR.substring(textR.indexOf(",", tenthCommaIndex + 1)).toLowerCase().contains(PROMPTS.get(k).toLowerCase()))
+					{
+						activity = k;
+						break;
+					}
 				
 				double act = activity;
 				double pos = posture;
