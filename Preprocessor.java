@@ -119,7 +119,9 @@ public class Preprocessor extends HttpServlet {
 		html += "<script src=\"https://code.highcharts.com/modules/exporting.js\"></script>";
 		html += "<script src=\"http://code.highcharts.com/modules/offline-exporting.js\"></script>";
 		html += "<script src=\"https://code.highcharts.com/modules/boost.js\"></script>";
-		html += "<script src=\"https://github.com/niklasvh/html2canvas/releases/download/0.4.1/html2canvas.js\"></script>";
+//		html += "<script src=\"https://github.com/niklasvh/html2canvas/releases/download/0.4.1/html2canvas.js\"></script>";
+//		html += "<script src=\"https://cdn.rawgit.com/mrcoles/full-page-screen-capture-chrome-extension/master/page.js\"></script>";
+//		html += "<script src=\"https://cdn.rawgit.com/mrcoles/full-page-screen-capture-chrome-extension/master/popup.js\"></script>";
 //		html += "<script src=\"https://rawgit.com/sameerkatti/Shirter/master/scripts/canvas2image.js\"></script>";
 //		html += "<script src=\"https://rawgit.com/hongru/canvas2image/master/canvas2image.js\"></script>";
 
@@ -516,11 +518,135 @@ public class Preprocessor extends HttpServlet {
 						+ "}); "
 				
 
-				+ "$(\"path\").removeAttr(\"visibility\");"
+				+ "$(\"path\").removeAttr(\"visibility\");\n";
 				
-				+ "Highcharts.Renderer.prototype.symbols.hline = function(x, y, width, height) {"
-				+ 		"return ['M',x ,y + width / 2,'L',x+height,y + width / 2];"
-				+ "};\n";
+//				+ "Highcharts.Renderer.prototype.symbols.hline = function(x, y, width, height) {"
+//				+ 		"return ['M',x ,y + width / 2,'L',x+height,y + width / 2];"
+//				+ "};\n";
+				
+				html += "var screenshot = '';";
+				
+				html += "function max(nums) {"
+						+ "return Math.max.apply(Math, nums.filter(function(x) { return x; }));"
+					+ "}";
+				
+				html += "function print() {"
+						+ "	var body = document.body,"
+						+ "	widths = ["
+				        + "	    document.documentElement.clientWidth,"
+				        + "	    document.body.scrollWidth,"
+				        + "	    document.documentElement.scrollWidth,"
+				        + "	    document.body.offsetWidth,"
+				        + "	    document.documentElement.offsetWidth"
+				        + "	],"
+				        + "	heights = ["
+				        + "	    document.documentElement.clientHeight,"
+				        + "	    document.body.scrollHeight,"
+				        + "	    document.documentElement.scrollHeight,"
+				        + "	    document.body.offsetHeight,"
+				        + "	    document.documentElement.offsetHeight"
+				        + "	],"
+				        + "	fullWidth = max(widths),"
+				        + "	fullHeight = max(heights),"
+				        + "	windowWidth = window.innerWidth,"
+				        + "	windowHeight = window.innerHeight,"
+				        + "	originalX = window.scrollX,"
+				        + "	originalY = window.scrollY,"
+				        + "	originalOverflowStyle = document.documentElement.style.overflow,"
+				        + "	arrangements = [],"				        
+				        + "	scrollPad = 200,"
+				        + "	yDelta = windowHeight - (windowHeight > scrollPad ? scrollPad : 0),"
+				        + "	xDelta = windowWidth,"
+				        + "	yPos = fullHeight - windowHeight,"
+				        + "	xPos,"
+				        + "	numArrangements;"
+ 
+				    + "	if (fullWidth <= xDelta + 1) {"
+				        + "	fullWidth = xDelta;"
+		        	+ "	}"
+
+				    + "	document.documentElement.style.overflow = 'hidden';"
+
+				    + "	while (yPos > -yDelta) {"
+				        + "	xPos = 0;"
+				        + "	while (xPos < fullWidth) {"
+				        + "	    arrangements.push([xPos, yPos]);"
+				        + "	    xPos += xDelta;"
+				        + "	}"
+				        + "	yPos -= yDelta;"
+			        + "	}"
+
+				    + "	numArrangements = arrangements.length;"
+
+				    + "	function cleanUp() {"
+				    + "	    document.documentElement.style.overflow = originalOverflowStyle;"
+				    + "	    window.scrollTo(originalX, originalY);"
+				    + "	}"
+
+				    + "	(function processArrangements() {"
+				        + "	if (!arrangements.length) {"
+				            + "	cleanUp();"
+//				            + "	if (callback) {"
+//				            + "	    callback();"
+//				            + "	}"
+				            + "	return;"
+			            + "	}"
+
+				        + "	var next = arrangements.shift(),"
+				            + "	x = next[0], y = next[1];"
+
+				        + "	window.scrollTo(x, y);"
+
+				        + "	var data = {"
+				            + "	msg: 'capturePage',"
+				            + "	x: window.scrollX,"
+				            + "	y: window.scrollY,"
+				            + "	complete: (numArrangements-arrangements.length)/numArrangements,"
+				            + "	totalWidth: fullWidth,"
+				            + "	totalHeight: fullHeight,"
+				            + "	devicePixelRatio: window.devicePixelRatio"
+			            + "	};"
+				        
+				        + "	window.setTimeout(function() {"				            
+				            + "	var cleanUpTimeout = window.setTimeout(cleanUp, 1250);"
+				            + "	if(capturePage(data))"
+				            	+ "	processArrangements();"
+			            + "	}, 150);"
+		            + "	})();"
+    				+"}"
+		            
+    				+ "	function capturePage(data) {"
+	    				+ "	var canvas;"
+	
+//	    				+ "	$('bar').style.width = parseInt(data.complete * 100, 10) + '%';"
+	
+	    				+ "	var scale = data.devicePixelRatio && data.devicePixelRatio !== 1 ?"
+	    					+ "	1 / data.devicePixelRatio : 1;"
+	    
+					    + "	if (scale !== 1) {"
+					        + "	data.x = data.x / scale;"
+					        + "	data.y = data.y / scale;"
+					        + "	data.totalWidth = data.totalWidth / scale;"
+					        + "	data.totalHeight = data.totalHeight / scale;"
+						+ "	}"
+	
+	
+					    + "	if (!screenshot.canvas) {"
+					        + "	canvas = document.createElement('canvas');"
+					        + "	canvas.width = data.totalWidth;"
+					        + "	canvas.height = data.totalHeight;"
+					        + "	screenshot.canvas = canvas;"
+					        + "	screenshot.ctx = canvas.getContext('2d');debugger;"
+					        
+			                + "	var image = new Image();"
+			                + "	image.onload = function() {"                    
+			                    + "	screenshot.ctx.drawImage(image, data.x, data.y);"
+			                    + "	return true;"
+			                + "	};"
+					    + "	}"
+				    + "	}"
+    				
+    				+"window.onload = print;";
 
 		html += "</script>\n";
 
@@ -609,20 +735,37 @@ public class Preprocessor extends HttpServlet {
 		ArrayList<ArrayList<Double>> ret = new ArrayList<ArrayList<Double>>();
 		
 		File folder = new File("survey");
+		if(!folder.exists()) {
+			Preprocessor.singleton.promptsFlag = false;
+			return new ArrayList<ArrayList<Double>>();
+		}
 		File[] listOfFiles = folder.listFiles();
 		
 		for (int i = 0; i < listOfFiles.length; i++) {
 			
-			InputStream csv, csvR;
+			InputStream csv = null, csvR = null;
 			
 			try {
-				csv = new FileInputStream(
-						listOfFiles[i].getPath() + "/Prompts.csv");
-				csvR = new FileInputStream(
-						listOfFiles[i].getPath() + "/PromptResponses_Random-EMA.csv");
+				for(File alpha : listOfFiles[i].listFiles()) {
+					
+					if(alpha.getName().toLowerCase().contains("prompts.csv") && alpha.isFile()) {
+						
+						csv = new FileInputStream(alpha.getPath());
+					}
+					
+					if(alpha.getName().toLowerCase().contains("prompt") && alpha.getName().toLowerCase().contains("responses") &&
+							alpha.getName().toLowerCase().endsWith("csv") && alpha.isFile()) {
+						
+						csvR = new FileInputStream(alpha.getPath());
+					}
+				}
+				
 			} catch (Exception ignored) {
 				continue;
 			}
+			
+			if(csv == null || csvR == null)
+				continue;
 			
 			Reader decoder = new InputStreamReader(csv, "UTF-8"), decoderR = new InputStreamReader(csvR, "UTF-8");
 			BufferedReader buffered = new BufferedReader(decoder), bufferedR = new BufferedReader(decoderR);
@@ -723,7 +866,7 @@ public class Preprocessor extends HttpServlet {
 							File file = null;
 							
 							for(File alpha : listOfTemps) {
-								if(alpha.getName().contains("annotation") && alpha.getName().contains("gz") && alpha.isFile()) {
+								if(alpha.getName().contains("annotation") && alpha.getName().toLowerCase().endsWith("csv.gz") && alpha.isFile()) {
 									file = alpha;
 									break;
 								}
@@ -817,9 +960,18 @@ public class Preprocessor extends HttpServlet {
 							File file = null;
 							
 							for(File alpha : listOfTemps) {
-								if(alpha.getName().contains("Battery.9") && alpha.isFile()) {
-									file = alpha;
-									break;
+								if(alpha.getName().toLowerCase().contains("battery") &&
+										alpha.getName().toLowerCase().contains("event") && 
+										alpha.getName().toLowerCase().endsWith("csv.gz") && alpha.isFile()) {
+									for(File beta : listOfTemps) {
+										if(beta.getName().toLowerCase().contains("phone") &&
+												beta.getName().toLowerCase().contains(alpha.getName().toLowerCase()
+														.substring(alpha.getName().toLowerCase().indexOf(".") + 1,
+																alpha.getName().toLowerCase().indexOf("-")))) {
+											file = alpha;
+											break;
+										}
+									}									
 								}
 							}
 							
@@ -974,11 +1126,20 @@ public class Preprocessor extends HttpServlet {
 							File file = null;						
 							
 							for(File alpha : listOfTemps) {
-								if(alpha.getName().contains("Battery.F") && alpha.isFile()) {
-									file = alpha;
-									break;
+								if(alpha.getName().toLowerCase().contains("battery") &&
+										alpha.getName().toLowerCase().contains("event") &&
+										alpha.getName().toLowerCase().endsWith("csv.gz") && alpha.isFile()) {
+									for(File beta : listOfTemps) {
+										if(beta.getName().toLowerCase().contains("watch") &&
+												beta.getName().toLowerCase().contains(alpha.getName().toLowerCase()
+														.substring(alpha.getName().toLowerCase().indexOf(".") + 1, 
+																alpha.getName().toLowerCase().indexOf("-")))) {
+											file = alpha;
+											break;
+										}
+									}									
 								}
-							}						
+							}					
 							
 							gz = new GZIPInputStream(new FileInputStream(file.getPath()));
 						} catch (Exception ignored) {
@@ -1132,7 +1293,9 @@ public class Preprocessor extends HttpServlet {
 							
 							for(File alpha : listOfTemps) {
 								if(alpha.getName().toLowerCase().contains("phone") &&
-										alpha.getName().toLowerCase().contains("calibrated")  && alpha.getName().contains("gz") && alpha.isFile()) {
+										alpha.getName().toLowerCase().contains("calibrated") &&
+										alpha.getName().toLowerCase().contains("sensor") &&
+										alpha.getName().toLowerCase().endsWith("csv.gz") && alpha.isFile()) {
 									file = alpha;
 									break;
 								}
@@ -1295,8 +1458,10 @@ public class Preprocessor extends HttpServlet {
 							File file = null;
 							
 							for(File alpha : listOfTemps) {
-								if((alpha.getName().toLowerCase().contains("watch") || alpha.getName().toLowerCase().contains("lgurbane")) &&
-										alpha.getName().toLowerCase().contains("calibrated")  && alpha.getName().contains("gz") && alpha.isFile()) {
+								if(alpha.getName().toLowerCase().contains("watch") &&
+										alpha.getName().toLowerCase().contains("calibrated") &&
+										alpha.getName().toLowerCase().contains("sensor") &&
+										alpha.getName().toLowerCase().endsWith("csv.gz") && alpha.isFile()) {
 									file = alpha;
 									break;
 								}
