@@ -844,7 +844,10 @@ public class Preprocessor extends HttpServlet {
 		ArrayList<ArrayList<Double>> ret = new ArrayList<ArrayList<Double>>();
 		
 		File folder = new File("data");
-		File[] listOfYears = folder.listFiles();		
+		File[] listOfYears = folder.listFiles();
+		
+		if(listOfYears == null)
+			return new ArrayList<ArrayList<Double>>();
 
 		for(int o = 0; o < listOfYears.length; o++) {
 			
@@ -934,7 +937,10 @@ public class Preprocessor extends HttpServlet {
 		
 		File folder = new File("data");
 		
-		File[] listOfYears = folder.listFiles();		
+		File[] listOfYears = folder.listFiles();
+		
+		if(listOfYears == null)
+			return new ArrayList<ArrayList<ArrayList<Double>>>();
 
 		for(int o = 0; o < listOfYears.length; o++) {
 			
@@ -1100,7 +1106,10 @@ public class Preprocessor extends HttpServlet {
 		
 		File folder = new File("data");
 
-		File[] listOfYears = folder.listFiles();		
+		File[] listOfYears = folder.listFiles();
+		
+		if(listOfYears == null)
+			return new ArrayList<ArrayList<ArrayList<Double>>>();
 
 		for(int o = 0; o < listOfYears.length; o++) {
 			
@@ -1266,7 +1275,10 @@ public class Preprocessor extends HttpServlet {
 		
 		File folder = new File("data");
 
-		File[] listOfYears = folder.listFiles();		
+		File[] listOfYears = folder.listFiles();
+		
+		if(listOfYears == null)
+			return new ArrayList<ArrayList<ArrayList<Double>>>();
 
 		for(int o = 0; o < listOfYears.length; o++) {
 			
@@ -1432,7 +1444,10 @@ public class Preprocessor extends HttpServlet {
 		
 		File folder = new File("data");
 
-		File[] listOfYears = folder.listFiles();		
+		File[] listOfYears = folder.listFiles();
+		
+		if(listOfYears == null)
+			return new ArrayList<ArrayList<ArrayList<Double>>>();
 
 		for(int o = 0; o < listOfYears.length; o++) {
 			
