@@ -16,11 +16,11 @@ This README tells whatever steps are necessary to get our application up and run
 
       * Download the latest version of Tomcat. It will download an exe file from the link, then follow the instructions to install the program)
 
-1) Put the war file from this repository in the **webapps** folder of where your application server (Tomcat) is installed.
+**1)** Put the war file from this repository in the **webapps** folder of where your application server (Tomcat) is installed.
 
    * Tomcat is usually installed in "C:\Program Files\Apache Software Foundation\Tomcat #.#" and the **webapps** folder is in that location.
 
-2) Run Tomcat (start the server) by opening **Monitor Tomcat** from your installed programs. An icon will appear in the bottom right tray area. Right click on the icon and select **start service**. Wait for it to finish.
+**2)** Run Tomcat (start the server) by opening **Monitor Tomcat** from your installed programs. An icon will appear in the bottom right tray area. Right click on the icon and select **start service**. Wait for it to finish.
 
    * After that it will automatically extract the war file in that folder. (You don't need to do anything)
 
@@ -28,7 +28,7 @@ This README tells whatever steps are necessary to get our application up and run
 
       * You can check the folder for a new folder named **Spades**
 
-3) Copy the **data** and **survey** folder containing your data to the root folder of which your application server (Tomcat) is installed ("C:\Program Files\Apache Software Foundation\Tomcat #.#").
+**3)** Copy the **data** and **survey** folder containing your data to the root folder of which your application server (Tomcat) is installed ("C:\Program Files\Apache Software Foundation\Tomcat #.#").
 
    * The **survey** folder contains folders with exact dates for prompts ("2015-10-01/...").
 
@@ -36,10 +36,10 @@ This README tells whatever steps are necessary to get our application up and run
 
       * The files in the folders are accelerometer data, battery data for both watch and phone along with annotation labels.
 
-4) After that using a browser, go to the URL of which the war file is located (for Tomcat it will be **localhost:8080/Spades**). After a few minutes (depending on the size of your data), the chart will be drawn. Usually 15mins for 3 months of data.
+**4)** After that using a browser, go to the URL of which the war file is located (for Tomcat it will be **localhost:8080/Spades**). After a few minutes (depending on the size of your data), the chart will be drawn. Usually 15mins for 3 months of data.
 
-5) For enabling and disabling labels and prompts simply use **Y** or **N** following that URL (localhost:8080/Spades/index.jsp?label=Y&prompt=Y). Y is for Yes and N is for No.
+**5)** For enabling and disabling labels and prompts simply use **Y** or **N** following that URL (localhost:8080/Spades/index.jsp?label=Y&prompt=Y). Y is for Yes and N is for No.
 
-6) For printing, you can use the free **[Full Page Screen Capture](https://chrome.google.com/webstore/detail/full-page-screen-capture/fdpohaocaechififmbbbbbknoalclacl?hl=en-US)** extension for chrome. It gives you an image of the whole chart.
+**6)** For printing, you can use the free **[Full Page Screen Capture](https://chrome.google.com/webstore/detail/full-page-screen-capture/fdpohaocaechififmbbbbbknoalclacl?hl=en-US)** extension for chrome. It gives you an image of the whole chart.
 
 PS: There are lots of other extensions and programs to capture the whole page as an image (i.e **[Open Screenshot](https://chrome.google.com/webstore/detail/open-screenshot/akgpcdalpfphjmfifkmfbpdmgdmeeaeo?hl=en)** for chrome and so on).
