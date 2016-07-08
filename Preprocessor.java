@@ -87,6 +87,8 @@ public class Preprocessor extends HttpServlet {
 	String YEAR;
 	boolean dataLabelsFlag = true;
 	boolean promptsFlag = true;
+	int height = 4500;
+	int width = 3300;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -138,7 +140,10 @@ public class Preprocessor extends HttpServlet {
 		html += "</head>\n";
 		html += "<body>\n";
 
-		html += "<div id=\"container\" style=\"width: 3300px; height: 4500px; margin: 0 auto\"></div>\n";
+		html += "<div id=\"container\" style=\""
+				+ "width: " + width + "px;"
+				+ "height: " + (height * singleton.data.size() / 90) + "px;"
+				+ "margin: 0 auto\"></div>\n";
 		
 		html += "<script type=\"text/javascript\">\n";
 
@@ -714,7 +719,7 @@ public class Preprocessor extends HttpServlet {
 	        t1.join();
 	        t2.join();
 	        t3.join();
-	        t4.join();	     	       
+	        t4.join();
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
