@@ -781,7 +781,7 @@ public class Preprocessor extends HttpServlet {
 			String textR = bufferedR.readLine();
 			textR = bufferedR.readLine();
 
-			while (text != null && countOccurrences(text, ',') < 7) {
+			while (text != null && textR != null && countOccurrences(text, ',') < 7) {
 				
 				DateFormat df = new SimpleDateFormat("y-M-d k:m:s", Locale.ENGLISH);
 
